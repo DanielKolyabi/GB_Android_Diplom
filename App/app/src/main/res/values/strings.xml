@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">GB Notes App</string>
+    <string name="Search_Notes">Поиск заметок</string>
+    <string name="note_title">Заголовок заметки</string>
+    <string name="note_content">Содержимое заметки</string>
+    <string name="folder_name">Название папки</string>
+    <string name="note_date">Дата создания заметки</string>
+    <string name="Title_editText_Note">Заголовок</string>
+    <string name="textView_date">Дата создания заметки</string>
+    <string name="content_you_note">Содержимое вашей заметки</string>
+    <string name="button_back">Кнопка назад</string>
+    <string name="button_done">Кнопка Готово</string>
 </resources>
