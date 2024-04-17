@@ -8,16 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
 import ru.example.gbnotesapp.R
-import ru.example.gbnotesapp.presentation.viewmodels.CreateNoteViewModel
+import ru.example.gbnotesapp.presentation.viewmodels.ListFoldersViewModel
 
 @AndroidEntryPoint
-class CreateNoteFragment : Fragment() {
+class ListFoldersFragment : Fragment() {
 
     companion object {
-        fun newInstance() = CreateNoteFragment()
+        fun newInstance() = ListFoldersFragment()
     }
 
-    private val viewModel: CreateNoteViewModel by viewModels()
+    private val viewModel: ListFoldersViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +29,6 @@ class CreateNoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_create_note, container, false)
+        return inflater.inflate(R.layout.fragment_list_folders, container, false)
     }
 }

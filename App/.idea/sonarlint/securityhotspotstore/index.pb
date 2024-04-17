@@ -1,7 +1,27 @@
 
-g
-7app/src/main/java/ru/example/gbnotesapp/MainActivity.kt,7\4\746a1e00e0307ad0a8d71a447551600db75cb215
 ~
 Napp/src/main/java/ru/example/gbnotesapp/presentation/fragments/MainFragment.kt,a\e\aee2c982b3fb19c317e740b156f98b7dde868570
 „
 Tapp/src/main/java/ru/example/gbnotesapp/presentation/fragments/CreateNoteFragment.kt,6\d\6dedbc636dba8c465f7aa25a5e63a84e7801d2bc
+t
+Dapp/src/main/java/ru/example/gbnotesapp/presentation/MainActivity.kt,6\4\64509c0e07fdfad90f3bc476c46df0090a89d0d9
+D
+app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
+I
+gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
+…
+Uapp/src/main/java/ru/example/gbnotesapp/presentation/fragments/ListFoldersFragment.kt,7\6\764ab6beac3ca568b03b15aa7616b915030e4b3c
+x
+Happ/src/main/java/ru/example/gbnotesapp/presentation/ViewModelFactory.kt,9\c\9c79f8bf3993e7fffbb999d09ef8fef7b7f6dee3
+@
+build.gradle.kts,d\b\dbcff70658daf80b53ce624f6adcaa529df5ed8d
+^
+.app/src/main/java/ru/example/gbnotesapp/App.kt,d\c\dc3e3046cdec5a027c0b3e9491a4da81d1a2b6a1
+‡
+Wapp/src/main/java/ru/example/gbnotesapp/presentation/viewmodels/ListFoldersViewModel.kt,0\d\0d1ed16aef95f8a0b472f24f9c9dd46ac80e79b5
+€
+Papp/src/main/java/ru/example/gbnotesapp/presentation/viewmodels/MainViewModel.kt,6\d\6d056e422eaecd56eade5d014cf714bf9b9cb85d
+†
+Vapp/src/main/java/ru/example/gbnotesapp/presentation/viewmodels/CreateNoteViewModel.kt,e\d\eda3c63ac05a3f8977da98b56daa9f3e38612b84
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e

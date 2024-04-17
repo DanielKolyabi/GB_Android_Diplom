@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="ru.example.gbnotesapp.presentation.fragments.MainFragment"
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_MainFragment_to_CreateNoteFragment"
+            app:destination="@id/createNoteFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+
+        <action
+            android:id="@+id/action_MainFragment_to_ListFoldersFragment"
+            app:destination="@id/listFoldersFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/createNoteFragment"
+        android:name="ru.example.gbnotesapp.presentation.fragments.CreateNoteFragment"
+        tools:layout="@layout/fragment_create_note">
+
+        <action
+            android:id="@+id/action_createNoteFragment_to_MainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/listFoldersFragment"
+        android:name="ru.example.gbnotesapp.presentation.fragments.ListFoldersFragment"
+        tools:layout="@layout/fragment_list_folders">
+
+        <action
+            android:id="@+id/action_ListFoldersFragment_to_MainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+</navigation>
