@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
 import ru.example.gbnotesapp.databinding.FragmentMainBinding
 import ru.example.gbnotesapp.presentation.ViewModelFactory
 import ru.example.gbnotesapp.presentation.viewmodels.MainViewModel
+import ru.example.gbnotesapp.presentation.viewmodels.NoteAdapter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,6 +40,17 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Создаем адаптер для RecyclerView
+        val adapter = NoteAdapter()
+        binding.recyclerView.adapter = adapter
+
+        // Обновляем список заметок при изменении данных
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.allNotes.collect { notes ->
+                adapter.submitList(notes)
+            }
+        }
+
         binding.buttonCreateNewNote.setOnClickListener{
             findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment)
         }
@@ -48,9 +62,10 @@ class MainFragment : Fragment() {
 
     }
 
-
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
 
     companion object {

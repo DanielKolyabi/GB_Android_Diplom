@@ -1,11 +1,25 @@
 package ru.example.gbnotesapp
 
 import android.app.Application
+import androidx.room.Room
 import dagger.hilt.android.HiltAndroidApp
+import ru.example.gbnotesapp.data.db.AppDatabase
 
 
 @HiltAndroidApp
 class App : Application() {
-    //TODO
-//    lateinit var db: AppDatabase
+
+    lateinit var db: AppDatabase
+
+    override fun onCreate() {
+        super.onCreate()
+
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "db"
+        )
+            .build()
+    }
+
 }

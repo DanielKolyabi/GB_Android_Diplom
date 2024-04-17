@@ -19,7 +19,8 @@
             android:id="@+id/button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/rounded_keyboard_backspace_24"
+            android:src="@drawable/round_keyboard_backspace_48"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/button_back" />
 
         <ImageButton
@@ -28,7 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/rounded_done_24"
+            android:src="@drawable/round_done_48"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/button_done" />
 
 
