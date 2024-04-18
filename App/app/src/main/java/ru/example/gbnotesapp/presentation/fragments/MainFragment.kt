@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
@@ -43,6 +44,11 @@ class MainFragment : Fragment() {
         // Создаем адаптер для RecyclerView
         val adapter = NoteAdapter()
         binding.recyclerView.adapter = adapter
+
+        // TODO проверить этот код на необходимость
+        // Задаем StaggeredGridLayoutManager для RecyclerView
+        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.recyclerView.layoutManager = layoutManager
 
         // Обновляем список заметок при изменении данных
         viewLifecycleOwner.lifecycleScope.launch {
