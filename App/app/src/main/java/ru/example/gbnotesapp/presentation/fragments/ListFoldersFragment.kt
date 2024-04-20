@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +53,14 @@ class ListFoldersFragment : Fragment() {
         }
         clickButtonBack()
         clickButtonNewFolder()
+
+        // Подписываемся на поток allFolders
+        lifecycleScope.launch {
+            viewModel.allFolders.collect { folders ->
+                // Здесь обновляем ScrollView
+                updateScrollView(folders)
+            }
+        }
 
     }
 
@@ -114,9 +124,31 @@ class ListFoldersFragment : Fragment() {
     }
 
     private fun createNewFolder(folderName: String) {
-        val newFolder = Folder(id = null, name = folderName)
+        val newFolder = Folder(id = null, name = folderName, isSelected = false)
         viewModel.insert(newFolder)
     }
+
+    private fun updateScrollView(folders: List<Folder>) {
+        binding.containerForItems.removeAllViews()
+        val inflater = LayoutInflater.from(context)
+        for (folder in folders) {
+            val folderView = createFolderView(inflater, folder)
+            binding.containerForItems.addView(folderView)
+        }
+    }
+    private fun createFolderView(inflater: LayoutInflater, folder: Folder): View {
+        // Создаем новый экземпляр вашего представления папки
+        val folderView = inflater.inflate(R.layout.item_folder_to_list, binding.containerForItems, false)
+
+        // Заполняем данные папки
+        val folderNameTextView = folderView.findViewById<TextView>(R.id.folderName)
+        folderNameTextView.text = folder.name
+
+        // Здесь вы можете заполнить другие элементы управления в вашем представлении папки
+
+        return folderView
+    }
+
 
     companion object {
     }

@@ -49,36 +49,25 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appBarLayout">
+        android:layout_below="@id/appBarLayout"
+        android:layout_above="@+id/newFolderButton"
+        >
 
         <LinearLayout
             android:id="@+id/containerForItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <include
-                layout="@layout/item_folder_to_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
-
-            <include
-                layout="@layout/item_folder_to_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
-
-
-
         </LinearLayout>
     </ScrollView>
 
     <include
-        android:id="@+id/button_create_new_folder"
+        android:id="@+id/newFolderButton"
         layout="@layout/item_button_new_folder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true" />
+
 
 </RelativeLayout>

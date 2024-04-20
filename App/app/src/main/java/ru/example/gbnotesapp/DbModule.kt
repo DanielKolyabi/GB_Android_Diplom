@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.example.gbnotesapp.data.db.AppDatabase
 import ru.example.gbnotesapp.data.db.FolderDao
+import ru.example.gbnotesapp.data.db.MIGRATION_1_2
 import ru.example.gbnotesapp.data.db.NoteDao
 import javax.inject.Singleton
 
@@ -20,8 +21,10 @@ class DbModule {
     fun provideDatabase(@ApplicationContext context: Context) = Room.databaseBuilder(
         context,
         AppDatabase::class.java,
-        "note_database"
-    ).build()
+        "db"
+    )
+        .addMigrations(MIGRATION_1_2)
+        .build()
 
     @Provides
     @Singleton

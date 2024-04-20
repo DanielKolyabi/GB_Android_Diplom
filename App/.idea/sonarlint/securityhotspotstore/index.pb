@@ -43,3 +43,5 @@ Capp/src/main/java/ru/example/gbnotesapp/data/db/FolderRepository.kt,c\3\c39813
 Napp/src/main/java/ru/example/gbnotesapp/presentation/viewmodels/NoteAdapter.kt,5\9\597b4cf278a71207d873c4b99b28c4c001a86a5a
 c
 3app/src/main/java/ru/example/gbnotesapp/DbModule.kt,2\c\2c4506424a81f1a1ea40918b47cb9e2bb291525a
+m
+=app/src/main/java/ru/example/gbnotesapp/data/db/Migrations.kt,5\3\5342b1feecae5d2567ad6348b3cc23e99404ec8a
