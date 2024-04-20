@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +26,6 @@ import ru.example.gbnotesapp.data.model.Folder
 import ru.example.gbnotesapp.databinding.FragmentListFoldersBinding
 import ru.example.gbnotesapp.presentation.ViewModelFactory
 import ru.example.gbnotesapp.presentation.viewmodels.ListFoldersViewModel
-import ru.example.gbnotesapp.presentation.viewmodels.MainViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -136,15 +137,17 @@ class ListFoldersFragment : Fragment() {
             binding.containerForItems.addView(folderView)
         }
     }
+
     private fun createFolderView(inflater: LayoutInflater, folder: Folder): View {
-        // Создаем новый экземпляр вашего представления папки
+        // Создаем новый экземпляр представления папки
         val folderView = inflater.inflate(R.layout.item_folder_to_list, binding.containerForItems, false)
 
         // Заполняем данные папки
         val folderNameTextView = folderView.findViewById<TextView>(R.id.folderName)
         folderNameTextView.text = folder.name
 
-        // Здесь вы можете заполнить другие элементы управления в вашем представлении папки
+        val isFolderSelected = folderView.findViewById<ImageView>(R.id.checkmark)
+        isFolderSelected.isVisible = folder.isSelected
 
         return folderView
     }
