@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroung_main_fragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -13,6 +14,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            android:background="@drawable/backgroung_item_note_to_main_fragment"
             android:layout_height="?attr/actionBarSize"
             android:orientation="horizontal">
 
@@ -67,22 +69,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true" />
 
-            <include
-                layout="@layout/item_folder_to_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
 
-            <include
-                layout="@layout/item_folder_to_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
 
         </LinearLayout>
     </ScrollView>
 
     <include
+        android:id="@+id/button_create_new_folder"
         layout="@layout/item_button_new_folder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -7,12 +7,13 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import ru.example.gbnotesapp.data.model.Folder
+import ru.example.gbnotesapp.data.model.Note
 
 @Dao
 interface FolderDao {
 
     @Query("SELECT * FROM folder")
-    fun getAllFolders(): Flow<Folder>
+    fun getAllFolders(): Flow<List<Folder>>
 
     @Query("SELECT * FROM folder WHERE isSelected = 1")
     fun getSelectedFolder(): Flow<Folder?>

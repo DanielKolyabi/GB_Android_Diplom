@@ -15,7 +15,11 @@ class FolderRepository @Inject constructor(private val folderDao: FolderDao) {
     suspend fun update(folder: Folder) = folderDao.update(folder)
 
     // Удалить папку
-    suspend fun delete(folder: Folder) = folderDao.delete(folder)
+    suspend fun delete(folder: Folder) {
+        if (folder.name != "Все") {
+            folderDao.delete(folder)
+        }
+    }
 
     // Получить выбранную папку
     fun getSelectedFolder() = folderDao.getSelectedFolder()
