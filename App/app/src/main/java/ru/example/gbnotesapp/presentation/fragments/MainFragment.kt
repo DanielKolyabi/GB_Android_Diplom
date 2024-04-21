@@ -1,19 +1,21 @@
 package ru.example.gbnotesapp.presentation.fragments
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
 import ru.example.gbnotesapp.databinding.FragmentMainBinding
 import ru.example.gbnotesapp.presentation.ViewModelFactory
+import ru.example.gbnotesapp.presentation.viewmodels.FolderAdapter
 import ru.example.gbnotesapp.presentation.viewmodels.MainViewModel
 import ru.example.gbnotesapp.presentation.viewmodels.NoteAdapter
 import javax.inject.Inject
@@ -41,14 +43,18 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Создаем адаптер для RecyclerView
         val adapter = NoteAdapter()
-        binding.recyclerView.adapter = adapter
+        binding.recyclerViewNotes.adapter = adapter
 
-        // TODO проверить этот код на необходимость
-        // Задаем StaggeredGridLayoutManager для RecyclerView
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerViewNotes.layoutManager = layoutManager
+
+        val folderAdapter = FolderAdapter()
+        binding.recyclerViewFolders.adapter = folderAdapter
+
+        val layoutManagerFolders = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewFolders.layoutManager = layoutManagerFolders
+
 
         // Обновляем список заметок при изменении данных
         viewLifecycleOwner.lifecycleScope.launch {
@@ -56,6 +62,13 @@ class MainFragment : Fragment() {
                 adapter.submitList(notes)
             }
         }
+        // Обновляем список папок при изменении данных
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.allFolders.collect { folders ->
+                folderAdapter.submitList(folders)
+            }
+        }
+
 
         binding.buttonCreateNewNote.setOnClickListener{
             findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment)

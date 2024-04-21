@@ -1,10 +1,13 @@
 package ru.example.gbnotesapp.presentation.viewmodels
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ru.example.gbnotesapp.R
 import ru.example.gbnotesapp.data.model.Note
 import ru.example.gbnotesapp.databinding.ItemNoteToMainFragmentBinding
 
@@ -40,8 +43,13 @@ class NoteViewHolder(private val binding: ItemNoteToMainFragmentBinding) :
         binding.apply {
             noteTitle.text = note.title
             noteContent.text = note.content
-            // TODO: Format and set note date
             noteDate.text = note.creationDate.toString()
+            root.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putParcelable("note", note)
+                }
+                it.findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment, bundle)
+            }
         }
     }
 }
