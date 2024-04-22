@@ -18,6 +18,10 @@ interface FolderDao {
     @Query("SELECT * FROM folder WHERE isSelected = 1")
     fun getSelectedFolder(): Flow<Folder?>
 
+    @Query("SELECT * FROM folder WHERE id = :folderId")
+    fun getFolderById(folderId: Int): Folder?
+
+
     @Insert
     suspend fun insert(folder: Folder)
 

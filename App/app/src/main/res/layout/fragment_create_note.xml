@@ -20,9 +20,17 @@
             android:id="@+id/button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/round_keyboard_backspace_48"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/button_back" />
+            android:contentDescription="@string/button_back"
+            android:src="@drawable/round_keyboard_backspace_48" />
+
+        <TextView
+            android:id="@+id/selectedFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
 
         <ImageButton
             android:id="@+id/button_done"
@@ -30,12 +38,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/round_done_48"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/button_done" />
+            android:contentDescription="@string/button_done"
+            android:src="@drawable/round_done_48" />
 
 
     </androidx.appcompat.widget.Toolbar>
+
+    <Spinner
+        android:id="@+id/spinner_folders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
         android:id="@+id/editText_title"
@@ -44,14 +61,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:hint="@string/Title_editText_Note"
+        android:inputType="text"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        android:autofillHints=""
-        android:inputType="text" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_folders" />
 
     <TextView
         android:id="@+id/textView_date"
@@ -72,13 +89,15 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:autofillHints=""
         android:gravity="top|start"
         android:hint="@string/content_you_note"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_date"
-        android:autofillHints="" />
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,26 +1,59 @@
 package ru.example.gbnotesapp.presentation.viewmodels
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
+import ru.example.gbnotesapp.data.db.FolderRepository
 import ru.example.gbnotesapp.data.model.Folder
+import ru.example.gbnotesapp.databinding.ItemFolderToListBinding
 import ru.example.gbnotesapp.databinding.ItemFolderToMainFragmentBinding
 
-class FolderAdapter : ListAdapter<Folder, FolderViewHolder>(FolderDiffUtilCallback()) {
+class FolderAdapter(
+    private val mainViewModel: MainViewModel,
+    private val listFoldersViewModel: ListFoldersViewModel,
+    private val folderRepository: FolderRepository,
+    private val viewType: Int
+) : ListAdapter<Folder, RecyclerView.ViewHolder>(FolderDiffUtilCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolderViewHolder {
-        val binding = ItemFolderToMainFragmentBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return FolderViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == VIEW_TYPE_MAIN) {
+            val binding = ItemFolderToMainFragmentBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+            MainFolderViewHolder(binding, mainViewModel, folderRepository)
+        } else {
+            val binding = ItemFolderToListBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+            ListFolderViewHolder(binding, listFoldersViewModel, folderRepository)
+        }
     }
 
-    override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentFolder = getItem(position)
-        holder.bind(currentFolder)
+        if (holder is MainFolderViewHolder) {
+            holder.bind(currentFolder)
+        } else if (holder is ListFolderViewHolder) {
+            holder.bind(currentFolder)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return viewType
+    }
+
+    companion object {
+        private const val VIEW_TYPE_MAIN = 0
+        private const val VIEW_TYPE_LIST = 1
     }
 }
 
@@ -32,12 +65,32 @@ class FolderDiffUtilCallback : DiffUtil.ItemCallback<Folder>() {
         oldItem == newItem
 }
 
-class FolderViewHolder(private val binding: ItemFolderToMainFragmentBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class MainFolderViewHolder(
+    private val binding: ItemFolderToMainFragmentBinding,
+    private val viewModel: MainViewModel,
+    private val folderRepository: FolderRepository
+) : RecyclerView.ViewHolder(binding.root) {
     fun bind(folder: Folder) {
         binding.apply {
             buttonFolderInMainRecyclerView.text = folder.name
-            buttonFolderInMainRecyclerView
+            buttonFolderInMainRecyclerView.setOnClickListener {
+                viewModel.viewModelScope.launch {
+                    folderRepository.setSelectedFolder(folder)
+                }
+            }
+        }
+    }
+}
+
+class ListFolderViewHolder(
+    private val binding: ItemFolderToListBinding,
+    private val viewModel: ListFoldersViewModel,
+    private val folderRepository: FolderRepository
+) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(folder: Folder) {
+        binding.apply {
+            folderName.text = folder.name
+            noteCount.text = folder.noteCount.toString()
         }
     }
 }

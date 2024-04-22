@@ -1,23 +1,26 @@
 package ru.example.gbnotesapp.presentation.viewmodels
 
-import android.os.Build
-import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import ru.example.gbnotesapp.data.db.FolderRepository
 import ru.example.gbnotesapp.data.db.NoteRepository
+import ru.example.gbnotesapp.data.model.Folder
 import ru.example.gbnotesapp.data.model.Note
-import java.time.format.DateTimeFormatter
-import javax.inject.Inject
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
 class CreateNoteViewModel @Inject constructor(
-    private val noteRepository: NoteRepository
+    private val noteRepository: NoteRepository,
+    private val folderRepository: FolderRepository
 ) : ViewModel() {
-    private val _note = MutableStateFlow(Note(0,0, "", "", ""))
+    private val _note = MutableStateFlow(Note(0, 0, "", "", ""))
     val note: StateFlow<Note> = _note
 
     private val _currentNote = MutableStateFlow<Note?>(null)
@@ -26,6 +29,7 @@ class CreateNoteViewModel @Inject constructor(
     private val _isNoteModified = MutableStateFlow(false)
     val isNoteModified: StateFlow<Boolean> = _isNoteModified
 
+    val allFolders = folderRepository.getAllFolders()
 
     fun onTitleChanged(newTitle: String) {
         _note.value = _note.value.copy(title = newTitle)
@@ -37,7 +41,6 @@ class CreateNoteViewModel @Inject constructor(
         _isNoteModified.value = true
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getCreationDate(): String {
         val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
         val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm "))
@@ -46,16 +49,14 @@ class CreateNoteViewModel @Inject constructor(
 
     fun setCurrentNote(note: Note?) {
         _currentNote.value = note
-        _note.value = note ?: Note(0,0, "", "", "")
+        _note.value = note ?: Note(0, 0, "", "", "")
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun createNewNote() {
         val creationDate = getCreationDate()
         _note.value = Note(0, 0, "", "", creationDate)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun onSaveNote() {
         viewModelScope.launch {
             val currentNote = _note.value
@@ -74,6 +75,12 @@ class CreateNoteViewModel @Inject constructor(
                 // Если текущая заметка не существует, создаем новую
                 noteRepository.insert(noteWithCreationDate)
             }
+        }
+    }
+
+    fun onFolderSelected(folder: Folder) {
+        if (folder.id != null) {
+            _note.value = _note.value.copy(folderId = folder.id)
         }
     }
 }

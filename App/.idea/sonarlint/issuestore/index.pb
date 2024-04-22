@@ -47,9 +47,3 @@ m
 =app/src/main/java/ru/example/gbnotesapp/data/db/Migrations.kt,5\3\5342b1feecae5d2567ad6348b3cc23e99404ec8a
 €
 Papp/src/main/java/ru/example/gbnotesapp/presentation/viewmodels/FolderAdapter.kt,0\0\00088d2379e86cc713f5f6fc12a1e018f0810891
-„
-Tapp/src/main/java/ru/example/gbnotesapp/presentation/fragments/UpdateNoteFragment.kt,f\6\f6974b25e5458db8dc2a47fa8e524fad655bf669
-‚
-Rapp/src/main/java/ru/example/gbnotesapp/presentation/fragments/EditNoteFragment.kt,d\b\dbd2b294156a18b77fd31752891eddb9531338b3
-„
-Tapp/src/main/java/ru/example/gbnotesapp/presentation/viewmodels/EditNoteViewModel.kt,f\6\f614434935210769d87dd71c0bb6bf04e599c52c

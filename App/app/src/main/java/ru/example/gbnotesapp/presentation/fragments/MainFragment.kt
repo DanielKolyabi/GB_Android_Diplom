@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
+import ru.example.gbnotesapp.data.db.FolderRepository
 import ru.example.gbnotesapp.databinding.FragmentMainBinding
 import ru.example.gbnotesapp.presentation.ViewModelFactory
 import ru.example.gbnotesapp.presentation.viewmodels.FolderAdapter
+import ru.example.gbnotesapp.presentation.viewmodels.ListFoldersViewModel
 import ru.example.gbnotesapp.presentation.viewmodels.MainViewModel
 import ru.example.gbnotesapp.presentation.viewmodels.NoteAdapter
 import javax.inject.Inject
@@ -29,8 +31,14 @@ class MainFragment : Fragment() {
 
     @Inject
     lateinit var mainViewModelFactory: ViewModelFactory
-    private val viewModel: MainViewModel by viewModels { mainViewModelFactory }
+    private val mainViewModel: MainViewModel by viewModels { mainViewModelFactory }
 
+    @Inject
+    lateinit var listFoldersViewModelFactory: ViewModelFactory
+    private val listFoldersViewModel: ListFoldersViewModel by viewModels { listFoldersViewModelFactory }
+
+    @Inject
+    lateinit var folderRepository: FolderRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +57,7 @@ class MainFragment : Fragment() {
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.recyclerViewNotes.layoutManager = layoutManager
 
-        val folderAdapter = FolderAdapter()
+        val folderAdapter = FolderAdapter(mainViewModel, listFoldersViewModel, folderRepository, VIEW_TYPE_MAIN)
         binding.recyclerViewFolders.adapter = folderAdapter
 
         val layoutManagerFolders = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -58,13 +66,13 @@ class MainFragment : Fragment() {
 
         // Обновляем список заметок при изменении данных
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.allNotes.collect { notes ->
+            mainViewModel.allNotes.collect { notes ->
                 adapter.submitList(notes)
             }
         }
         // Обновляем список папок при изменении данных
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.allFolders.collect { folders ->
+            mainViewModel.allFolders.collect { folders ->
                 folderAdapter.submitList(folders)
             }
         }
@@ -88,6 +96,7 @@ class MainFragment : Fragment() {
 
 
     companion object {
-        fun newInstance() = MainFragment()
+        private const val VIEW_TYPE_MAIN = 0
+        private const val VIEW_TYPE_LIST = 1
     }
 }

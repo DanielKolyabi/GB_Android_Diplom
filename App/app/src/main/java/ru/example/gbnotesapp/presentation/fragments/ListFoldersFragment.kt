@@ -39,6 +39,8 @@ class ListFoldersFragment : Fragment() {
     lateinit var listFoldersViewModelFactory: ViewModelFactory
     private val viewModel: ListFoldersViewModel by viewModels { listFoldersViewModelFactory }
 
+    //val folderAdapter = FolderAdapter(mainViewModel, listFoldersViewModel, folderRepository, VIEW_TYPE_LIST)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

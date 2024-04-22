@@ -7,6 +7,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
+import ru.example.gbnotesapp.data.model.Folder
 import ru.example.gbnotesapp.data.model.Note
 import ru.example.gbnotesapp.databinding.FragmentCreateNoteBinding
 import ru.example.gbnotesapp.presentation.ViewModelFactory
@@ -30,6 +33,9 @@ class CreateNoteFragment : Fragment() {
     @Inject
     lateinit var createNoteViewModelFactory: ViewModelFactory
     private val viewModel: CreateNoteViewModel by viewModels { createNoteViewModelFactory }
+
+    private lateinit var folderAdapter: ArrayAdapter<String>
+
 
 
     override fun onCreateView(
@@ -60,6 +66,30 @@ class CreateNoteFragment : Fragment() {
 
         setEditTextTitleTextChangedListener()
         setEditTextContentTextChangedListener()
+
+        folderAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item)
+        binding.spinnerFolders.adapter = folderAdapter
+
+        loadFolders()
+
+
+        binding.spinnerFolders.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val selectedFolderName = parent.getItemAtPosition(position) as String
+                lifecycleScope.launch {
+                    viewModel.allFolders.collect { folders ->
+                        val selectedFolder = folders.find { it.name == selectedFolderName }
+                        if (selectedFolder != null) {
+                            viewModel.onFolderSelected(selectedFolder)
+                        }
+                    }
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Ничего не делать
+            }
+        }
+
 
     }
 
@@ -121,6 +151,18 @@ class CreateNoteFragment : Fragment() {
             }
         })
     }
+
+    private fun loadFolders() {
+        lifecycleScope.launch {
+            viewModel.allFolders.collect { folders ->
+                folderAdapter.clear()
+                val folderNames = folders.map { it.name }
+                folderAdapter.addAll(folderNames)
+                folderAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
 
 
     override fun onDestroyView() {
