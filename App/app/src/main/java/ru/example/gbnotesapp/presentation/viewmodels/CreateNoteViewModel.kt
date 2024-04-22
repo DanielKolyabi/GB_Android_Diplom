@@ -74,6 +74,8 @@ class CreateNoteViewModel @Inject constructor(
             } else {
                 // Если текущая заметка не существует, создаем новую
                 noteRepository.insert(noteWithCreationDate)
+                // Обновляем счетчик заметок в папке
+                folderRepository.updateNoteCount(noteWithCreationDate.folderId)
             }
         }
     }

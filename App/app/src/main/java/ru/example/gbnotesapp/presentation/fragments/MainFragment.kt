@@ -11,9 +11,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
 import ru.example.gbnotesapp.data.db.FolderRepository
+import ru.example.gbnotesapp.data.db.NoteRepository
 import ru.example.gbnotesapp.databinding.FragmentMainBinding
 import ru.example.gbnotesapp.presentation.ViewModelFactory
 import ru.example.gbnotesapp.presentation.viewmodels.FolderAdapter
@@ -40,6 +42,9 @@ class MainFragment : Fragment() {
     @Inject
     lateinit var folderRepository: FolderRepository
 
+    @Inject
+    lateinit var noteRepository: NoteRepository
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,18 +56,18 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         val adapter = NoteAdapter()
         binding.recyclerViewNotes.adapter = adapter
 
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.recyclerViewNotes.layoutManager = layoutManager
 
-        val folderAdapter = FolderAdapter(mainViewModel, listFoldersViewModel, folderRepository, VIEW_TYPE_MAIN)
+        val folderAdapter = FolderAdapter(mainViewModel, listFoldersViewModel, folderRepository, noteRepository, VIEW_TYPE_MAIN,adapter)
         binding.recyclerViewFolders.adapter = folderAdapter
 
         val layoutManagerFolders = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerViewFolders.layoutManager = layoutManagerFolders
-
 
         // Обновляем список заметок при изменении данных
         viewLifecycleOwner.lifecycleScope.launch {
@@ -70,13 +75,20 @@ class MainFragment : Fragment() {
                 adapter.submitList(notes)
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            folderRepository.getSelectedFolder().collect { selectedFolder ->
+                val notesInSelectedFolder = noteRepository.getNotesBySelectedFolder().first()
+                adapter.submitList(notesInSelectedFolder)
+            }
+        }
+
         // Обновляем список папок при изменении данных
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.allFolders.collect { folders ->
                 folderAdapter.submitList(folders)
             }
         }
-
 
         binding.buttonCreateNewNote.setOnClickListener{
             findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment)
@@ -86,7 +98,6 @@ class MainFragment : Fragment() {
             findNavController().navigate(R.id.action_MainFragment_to_ListFoldersFragment)
         }
 
-
     }
 
     override fun onDestroyView() {
@@ -94,9 +105,19 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
-
     companion object {
         private const val VIEW_TYPE_MAIN = 0
         private const val VIEW_TYPE_LIST = 1
     }
 }
+
+/**
+ * Отображение названия папки в TextView при переходе из MainFragment в CreateNoteFragment:
+ * Тебе нужно передать выбранную папку как аргумент при навигации из MainFragment в CreateNoteFragment.
+ * Затем ты можешь получить эту папку в CreateNoteFragment и установить ее
+ * название в TextView. Вот как это можно сделать:
+ *
+ * val action = MainFragmentDirections.actionMainFragmentToCreateNoteFragment(note, selectedFolder)
+ * findNavController().navigate(action)
+ *
+ */

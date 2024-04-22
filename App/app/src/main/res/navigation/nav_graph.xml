@@ -14,7 +14,13 @@
             android:id="@+id/action_MainFragment_to_CreateNoteFragment"
             app:destination="@id/createNoteFragment"
             app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out" />
+            app:exitAnim="@android:anim/fade_out">
+            <argument
+                android:name="selectedFolder"
+                android:defaultValue="@null"
+                app:argType="com.example.app.Folder"
+                app:nullable="true" />
+        </action>
 
         <action
             android:id="@+id/action_MainFragment_to_ListFoldersFragment"
@@ -33,7 +39,7 @@
             android:id="@+id/action_createNoteFragment_to_MainFragment"
             app:destination="@id/mainFragment"
             app:popUpTo="@id/mainFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
 
     </fragment>
 
@@ -46,7 +52,7 @@
             android:id="@+id/action_ListFoldersFragment_to_MainFragment"
             app:destination="@id/mainFragment"
             app:popUpTo="@id/mainFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

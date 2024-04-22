@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
+import ru.example.gbnotesapp.data.db.FolderRepository
 import ru.example.gbnotesapp.data.model.Folder
 import ru.example.gbnotesapp.data.model.Note
 import ru.example.gbnotesapp.databinding.FragmentCreateNoteBinding
@@ -34,8 +35,10 @@ class CreateNoteFragment : Fragment() {
     lateinit var createNoteViewModelFactory: ViewModelFactory
     private val viewModel: CreateNoteViewModel by viewModels { createNoteViewModelFactory }
 
-    private lateinit var folderAdapter: ArrayAdapter<String>
+    private lateinit var folderAdapter: ArrayAdapter<Folder>
 
+    @Inject
+    lateinit var folderRepository: FolderRepository
 
 
     override fun onCreateView(
@@ -48,9 +51,15 @@ class CreateNoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupButtonListeners()
+        setEditTextTitleTextChangedListener()
+        setEditTextContentTextChangedListener()
 
         val note = arguments?.getParcelable<Note>("note")
         viewModel.setCurrentNote(note)
+
+        val selectedFolder = arguments?.getParcelable<Folder>("selectedFolder")
+        binding.selectedFolder.text = selectedFolder?.name
 
         if (note == null) {
             viewModel.createNewNote()
@@ -61,17 +70,11 @@ class CreateNoteFragment : Fragment() {
             binding.textViewDate.text = note.creationDate
         }
 
-        clickButtonBack()
-        clickButtonDone()
-
-        setEditTextTitleTextChangedListener()
-        setEditTextContentTextChangedListener()
 
         folderAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item)
         binding.spinnerFolders.adapter = folderAdapter
 
         loadFolders()
-
 
         binding.spinnerFolders.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -81,6 +84,7 @@ class CreateNoteFragment : Fragment() {
                         val selectedFolder = folders.find { it.name == selectedFolderName }
                         if (selectedFolder != null) {
                             viewModel.onFolderSelected(selectedFolder)
+                            binding.selectedFolder.text = selectedFolderName
                         }
                     }
                 }
@@ -93,6 +97,25 @@ class CreateNoteFragment : Fragment() {
 
     }
 
+    private fun setupButtonListeners() {
+        binding.buttonBack.setOnClickListener { navigateBack() }
+        binding.buttonDone.setOnClickListener { saveNoteAndNavigateBack() }
+    }
+
+    private fun navigateBack() {
+        findNavController().navigate(R.id.action_createNoteFragment_to_MainFragment)
+    }
+
+    private fun saveNoteAndNavigateBack() {
+        lifecycleScope.launch {
+            viewModel.onSaveNote()
+        }
+        lifecycleScope.launch {
+            val selectedFolder = binding.spinnerFolders.selectedItem as Folder
+            folderRepository.setSelectedFolder(selectedFolder)
+        }
+        navigateBack()
+    }
 
     private fun setCurrentCreationDate() {
         lifecycleScope.launch {
@@ -100,23 +123,6 @@ class CreateNoteFragment : Fragment() {
                 val creationDate = viewModel.getCreationDate()
                 binding.textViewDate.text = creationDate
             }
-        }
-    }
-
-    private fun clickButtonBack() {
-        binding.buttonBack.setOnClickListener {
-            findNavController().navigate(R.id.action_createNoteFragment_to_MainFragment)
-        }
-    }
-
-    private fun clickButtonDone() {
-        binding.buttonDone.setOnClickListener {
-            lifecycleScope.launch {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    viewModel.onSaveNote()
-                }
-            }
-            findNavController().navigate(R.id.action_createNoteFragment_to_MainFragment)
         }
     }
 
@@ -156,8 +162,9 @@ class CreateNoteFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.allFolders.collect { folders ->
                 folderAdapter.clear()
-                val folderNames = folders.map { it.name }
-                folderAdapter.addAll(folderNames)
+//                val folderNames = folders.map { it.name }
+//                folderAdapter.addAll(folderNames)
+                folderAdapter.addAll(folders)
                 folderAdapter.notifyDataSetChanged()
             }
         }
