@@ -31,7 +31,13 @@ class FolderAdapter(
                 parent,
                 false
             )
-            MainFolderViewHolder(binding, mainViewModel, folderRepository, noteRepository, noteAdapter)
+            MainFolderViewHolder(
+                binding,
+                mainViewModel,
+                folderRepository,
+                noteRepository,
+                noteAdapter
+            )
         } else {
             val binding = ItemFolderToListBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -76,37 +82,16 @@ class MainFolderViewHolder(
     private val noteRepository: NoteRepository,
     private val noteAdapter: NoteAdapter
 ) : RecyclerView.ViewHolder(binding.root) {
-    init {
+
+    fun bind(folder: Folder) {
         binding.buttonFolderInMainRecyclerView.setOnClickListener {
-            val folder = binding.folder
-            if (folder != null) {
-                viewModel.viewModelScope.launch {
-                    folderRepository.setSelectedFolder(folder)
-                    val notesInSelectedFolder = noteRepository.getNotesBySelectedFolder().first()
-                    noteAdapter.submitList(notesInSelectedFolder)
-                }
+            viewModel.viewModelScope.launch {
+                folderRepository.setSelectedFolder(folder)
+                val notesInSelectedFolder = noteRepository.getNotesBySelectedFolder().first()
+                noteAdapter.submitList(notesInSelectedFolder)
             }
         }
     }
-
-    fun bind(folder: Folder) {
-        binding.folder = folder
-    }
-
-
-
-//    fun bind(folder: Folder) {
-//        binding.apply {
-//            buttonFolderInMainRecyclerView.text = folder.name
-//            buttonFolderInMainRecyclerView.setOnClickListener {
-//                viewModel.viewModelScope.launch {
-//                    folderRepository.setSelectedFolder(folder)
-//                    val notesInSelectedFolder = noteRepository.getNotesBySelectedFolder().first()
-//                    noteAdapter.submitList(notesInSelectedFolder)
-//                }
-//            }
-//        }
-//    }
 }
 
 class ListFolderViewHolder(

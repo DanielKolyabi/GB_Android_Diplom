@@ -11,7 +11,7 @@ import ru.example.gbnotesapp.R
 import ru.example.gbnotesapp.data.model.Note
 import ru.example.gbnotesapp.databinding.ItemNoteToMainFragmentBinding
 
-class NoteAdapter : ListAdapter<Note, NoteViewHolder>(DiffUtilCallback()) {
+class NoteAdapter(private val listener: OnNoteClickListener) : ListAdapter<Note, NoteViewHolder>(DiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val binding = ItemNoteToMainFragmentBinding.inflate(
@@ -19,7 +19,7 @@ class NoteAdapter : ListAdapter<Note, NoteViewHolder>(DiffUtilCallback()) {
             parent,
             false
         )
-        return NoteViewHolder(binding)
+        return NoteViewHolder(binding,listener)
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
@@ -37,7 +37,10 @@ class DiffUtilCallback : DiffUtil.ItemCallback<Note>() {
 }
 
 
-class NoteViewHolder(private val binding: ItemNoteToMainFragmentBinding) :
+class NoteViewHolder(
+    private val binding: ItemNoteToMainFragmentBinding,
+    private val listener: OnNoteClickListener
+) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(note: Note) {
         binding.apply {
@@ -45,11 +48,13 @@ class NoteViewHolder(private val binding: ItemNoteToMainFragmentBinding) :
             noteContent.text = note.content
             noteDate.text = note.creationDate.toString()
             root.setOnClickListener {
-                val bundle = Bundle().apply {
-                    putParcelable("note", note)
-                }
-                it.findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment, bundle)
+                listener.onNoteClick(note)
+//                it.findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment)
             }
         }
     }
+}
+
+interface OnNoteClickListener {
+    fun onNoteClick(note: Note)
 }

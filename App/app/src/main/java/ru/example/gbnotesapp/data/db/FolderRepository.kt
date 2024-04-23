@@ -45,10 +45,6 @@ class FolderRepository @Inject constructor(
         update(folder.copy(isSelected = true))
     }
 
-
-
-
-
     // Получить выбранную папку
     fun getSelectedFolder() = folderDao.getSelectedFolder()
 }

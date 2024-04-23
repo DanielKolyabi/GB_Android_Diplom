@@ -16,16 +16,18 @@ import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
 import ru.example.gbnotesapp.data.db.FolderRepository
 import ru.example.gbnotesapp.data.db.NoteRepository
+import ru.example.gbnotesapp.data.model.Note
 import ru.example.gbnotesapp.databinding.FragmentMainBinding
 import ru.example.gbnotesapp.presentation.ViewModelFactory
 import ru.example.gbnotesapp.presentation.viewmodels.FolderAdapter
 import ru.example.gbnotesapp.presentation.viewmodels.ListFoldersViewModel
 import ru.example.gbnotesapp.presentation.viewmodels.MainViewModel
 import ru.example.gbnotesapp.presentation.viewmodels.NoteAdapter
+import ru.example.gbnotesapp.presentation.viewmodels.OnNoteClickListener
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), OnNoteClickListener {
 
     private var _binding: FragmentMainBinding? = null
     private val binding
@@ -57,7 +59,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        val adapter = NoteAdapter()
+        val adapter = NoteAdapter(this)
         binding.recyclerViewNotes.adapter = adapter
 
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -108,6 +110,11 @@ class MainFragment : Fragment() {
     companion object {
         private const val VIEW_TYPE_MAIN = 0
         private const val VIEW_TYPE_LIST = 1
+    }
+
+    override fun onNoteClick(note: Note) {
+        val action = MainFragmentDirections.actionMainFragmentToCreateNoteFragment(note.folderId)
+        findNavController().navigate(action)
     }
 }
 
