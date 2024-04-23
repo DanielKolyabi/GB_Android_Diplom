@@ -14,4 +14,5 @@
     <string name="_0">0</string>
     <string name="Folders">Папки</string>
     <string name="button_create_new_note">Кнопка для создания новой заметки</string>
+    <string name="go_to_folders_list">Перейти к списку папок</string>
 </resources>

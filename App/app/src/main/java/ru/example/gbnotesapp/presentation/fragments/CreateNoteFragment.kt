@@ -58,8 +58,15 @@ class CreateNoteFragment : Fragment() {
         val note = arguments?.getParcelable<Note>("note")
         viewModel.setCurrentNote(note)
 
-        val selectedFolder = arguments?.getParcelable<Folder>("selectedFolder")
-        binding.selectedFolder.text = selectedFolder?.name
+
+        lifecycleScope.launch {
+            val selectedFolderId = arguments?.getInt("selectedFolderId") ?: 0
+            if (selectedFolderId != 0) {
+                val selectedFolder = selectedFolderId.let { folderRepository.getFolderById(it) }
+                binding.selectedFolder.text = selectedFolder?.name
+            } else
+                binding.selectedFolder.text = "нет папки"
+        }
 
         if (note == null) {
             viewModel.createNewNote()
@@ -71,28 +78,53 @@ class CreateNoteFragment : Fragment() {
         }
 
 
-        folderAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item)
+        folderAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item)
         binding.spinnerFolders.adapter = folderAdapter
 
         loadFolders()
-
-        binding.spinnerFolders.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val selectedFolderName = parent.getItemAtPosition(position) as String
-                lifecycleScope.launch {
-                    viewModel.allFolders.collect { folders ->
-                        val selectedFolder = folders.find { it.name == selectedFolderName }
-                        if (selectedFolder != null) {
-                            viewModel.onFolderSelected(selectedFolder)
-                            binding.selectedFolder.text = selectedFolderName
+//
+//        binding.spinnerFolders.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+//                val selectedFolderName = parent.getItemAtPosition(position) as String
+//                lifecycleScope.launch {
+//                    viewModel.allFolders.collect { folders ->
+//                        val selectedFolder = folders.find { it.name == selectedFolderName }
+//                        if (selectedFolder != null) {
+//                            viewModel.onFolderSelected(selectedFolder)
+//                            binding.selectedFolder.text = selectedFolderName
+//                        }
+//                    }
+//                }
+//            }
+//            override fun onNothingSelected(parent: AdapterView<*>) {
+//                // Ничего не делать
+//            }
+//        }
+        binding.spinnerFolders.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedFolder = parent.getItemAtPosition(position) as Folder
+                    val selectedFolderName = selectedFolder.name
+                    lifecycleScope.launch {
+                        viewModel.allFolders.collect { folders ->
+                            val folder = folders.find { it.name == selectedFolderName }
+                            if (folder != null) {
+                                viewModel.onFolderSelected(folder)
+                                binding.selectedFolder.text = selectedFolderName
+                            }
                         }
                     }
                 }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    // Ничего не делать
+                }
             }
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Ничего не делать
-            }
-        }
 
 
     }
@@ -169,7 +201,6 @@ class CreateNoteFragment : Fragment() {
             }
         }
     }
-
 
 
     override fun onDestroyView() {

@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
 import ru.example.gbnotesapp.data.db.FolderRepository
 import ru.example.gbnotesapp.data.db.NoteRepository
+import ru.example.gbnotesapp.data.model.Folder
 import ru.example.gbnotesapp.data.model.Note
 import ru.example.gbnotesapp.databinding.FragmentMainBinding
 import ru.example.gbnotesapp.presentation.ViewModelFactory

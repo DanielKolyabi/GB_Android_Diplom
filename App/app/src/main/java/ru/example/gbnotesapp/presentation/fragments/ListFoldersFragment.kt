@@ -127,7 +127,11 @@ class ListFoldersFragment : Fragment() {
     }
 
     private fun createNewFolder(folderName: String) {
-        val newFolder = Folder(id = null, name = folderName, isSelected = false)
+        if (folderName.isBlank()) {
+            Toast.makeText(requireContext(), "Имя папки не может быть пустым", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val newFolder = Folder(null,folderName,0,false)
         viewModel.insert(newFolder)
     }
 

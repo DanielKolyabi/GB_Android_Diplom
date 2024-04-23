@@ -9,12 +9,10 @@ import ru.example.gbnotesapp.data.db.MIGRATION_1_2
 
 @HiltAndroidApp
 class App : Application() {
-
     lateinit var db: AppDatabase
 
     override fun onCreate() {
         super.onCreate()
-
         db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java,
@@ -23,5 +21,4 @@ class App : Application() {
             .addMigrations(MIGRATION_1_2)
             .build()
     }
-
 }
