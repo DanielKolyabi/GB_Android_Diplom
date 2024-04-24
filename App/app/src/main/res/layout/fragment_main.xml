@@ -11,36 +11,38 @@
         android:id="@+id/searchView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_search_view"
         android:hint="@string/Search_Notes"
-        app:layout_constraintEnd_toStartOf="@+id/button_navigation_to_folders"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/button_navigation_to_folders"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
+        android:contentDescription="@string/go_to_folders_list"
         android:src="@drawable/outline_folders_24"
-        app:layout_constraintBottom_toBottomOf="@+id/searchView"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewFolders"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/searchView"
-        android:contentDescription="@string/go_to_folders_list" />
+        app:layout_constraintTop_toTopOf="@+id/recyclerViewFolders"
+        app:layout_constraintVertical_bias="0.503" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFolders"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_navigation_to_folders"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
@@ -64,10 +66,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
+        android:contentDescription="@string/button_create_new_note"
         android:src="@drawable/baseline_add_24"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/button_create_new_note" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

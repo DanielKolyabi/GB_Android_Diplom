@@ -39,11 +39,13 @@ q
 Aapp/src/main/java/ru/example/gbnotesapp/data/db/NoteRepository.kt,b\c\bca11cee4c8d19b422ac9fc6c3d205ea186d62a8
 s
 Capp/src/main/java/ru/example/gbnotesapp/data/db/FolderRepository.kt,c\3\c39813a47ad38854997ccea4fd519d36152cea58
-~
-Napp/src/main/java/ru/example/gbnotesapp/presentation/viewmodels/NoteAdapter.kt,5\9\597b4cf278a71207d873c4b99b28c4c001a86a5a
 c
 3app/src/main/java/ru/example/gbnotesapp/DbModule.kt,2\c\2c4506424a81f1a1ea40918b47cb9e2bb291525a
 m
 =app/src/main/java/ru/example/gbnotesapp/data/db/Migrations.kt,5\3\5342b1feecae5d2567ad6348b3cc23e99404ec8a
-€
-Papp/src/main/java/ru/example/gbnotesapp/presentation/viewmodels/FolderAdapter.kt,0\0\00088d2379e86cc713f5f6fc12a1e018f0810891
+|
+Lapp/src/main/java/ru/example/gbnotesapp/presentation/adapters/NoteAdapter.kt,a\8\a8d698cf0bf4409b24f50d49e5edd2a07e99bfd6
+‚
+Rapp/src/main/java/ru/example/gbnotesapp/presentation/adapters/ListFolderAdapter.kt,e\f\ef104dd0d306d6a6bc65278a2d3e925b17f0d550
+‚
+Rapp/src/main/java/ru/example/gbnotesapp/presentation/adapters/MainFolderAdapter.kt,1\c\1c08198e4cf1820a8ec5572482ad184787258984

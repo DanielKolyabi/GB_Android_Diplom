@@ -1,17 +1,16 @@
-package ru.example.gbnotesapp.presentation.viewmodels
+package ru.example.gbnotesapp.presentation.adapters
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.example.gbnotesapp.R
 import ru.example.gbnotesapp.data.model.Note
 import ru.example.gbnotesapp.databinding.ItemNoteToMainFragmentBinding
 
-class NoteAdapter(private val listener: OnNoteClickListener) : ListAdapter<Note, NoteViewHolder>(DiffUtilCallback()) {
+class NoteAdapter(private val listener: OnNoteClickListener) : ListAdapter<Note, NoteViewHolder>(
+    DiffUtilCallback()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val binding = ItemNoteToMainFragmentBinding.inflate(
@@ -19,7 +18,7 @@ class NoteAdapter(private val listener: OnNoteClickListener) : ListAdapter<Note,
             parent,
             false
         )
-        return NoteViewHolder(binding,listener)
+        return NoteViewHolder(binding, listener)
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {

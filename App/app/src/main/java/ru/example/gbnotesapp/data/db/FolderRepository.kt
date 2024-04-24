@@ -12,7 +12,7 @@ class FolderRepository @Inject constructor(
 ) {
 
     // Получить все папки
-    fun getAllFolders() = folderDao.getAllFolders()
+    suspend fun getAllFolders() = folderDao.getAllFolders()
 
     // Вставить новую папку
     suspend fun insert(folder: Folder) = folderDao.insert(folder)

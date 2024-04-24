@@ -190,6 +190,18 @@ class CreateNoteFragment : Fragment() {
         })
     }
 
+//    private fun loadFolders() {
+//        lifecycleScope.launch {
+//            viewModel.allFolders.collect { folders ->
+//                folderAdapter.clear()
+////                val folderNames = folders.map { it.name }
+////                folderAdapter.addAll(folderNames)
+//                folderAdapter.addAll(folders)
+//                folderAdapter.notifyDataSetChanged()
+//            }
+//        }
+//    }
+
     private fun loadFolders() {
         lifecycleScope.launch {
             viewModel.allFolders.collect { folders ->
@@ -201,6 +213,7 @@ class CreateNoteFragment : Fragment() {
             }
         }
     }
+
 
 
     override fun onDestroyView() {

@@ -11,7 +11,7 @@
     <string name="button_back">Кнопка назад</string>
     <string name="button_done">Кнопка Готово</string>
     <string name="new_folder_button">Новая папка</string>
-    <string name="_0">0</string>
+    <string name="_0">пусто</string>
     <string name="Folders">Папки</string>
     <string name="button_create_new_note">Кнопка для создания новой заметки</string>
     <string name="go_to_folders_list">Перейти к списку папок</string>

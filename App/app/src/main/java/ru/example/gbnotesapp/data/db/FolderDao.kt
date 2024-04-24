@@ -13,7 +13,11 @@ import ru.example.gbnotesapp.data.model.Note
 interface FolderDao {
 
     @Query("SELECT * FROM folder")
-    fun getAllFolders(): Flow<List<Folder>>
+    suspend fun getAllFolders(): List<Folder>
+
+//    fun getAllFolders(): Flow<List<Folder>>
+    
+
 
     @Query("SELECT * FROM folder WHERE isSelected = 1")
     fun getSelectedFolder(): Flow<Folder?>

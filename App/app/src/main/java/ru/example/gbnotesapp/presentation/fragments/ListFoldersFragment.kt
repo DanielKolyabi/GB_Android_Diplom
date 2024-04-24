@@ -6,7 +6,6 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -18,13 +17,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
+import ru.example.gbnotesapp.data.db.FolderRepository
+import ru.example.gbnotesapp.data.db.NoteRepository
 import ru.example.gbnotesapp.data.model.Folder
 import ru.example.gbnotesapp.databinding.FragmentListFoldersBinding
 import ru.example.gbnotesapp.presentation.ViewModelFactory
+import ru.example.gbnotesapp.presentation.adapters.ListFolderAdapter
 import ru.example.gbnotesapp.presentation.viewmodels.ListFoldersViewModel
 import javax.inject.Inject
 
@@ -37,9 +39,7 @@ class ListFoldersFragment : Fragment() {
 
     @Inject
     lateinit var listFoldersViewModelFactory: ViewModelFactory
-    private val viewModel: ListFoldersViewModel by viewModels { listFoldersViewModelFactory }
-
-    //val folderAdapter = FolderAdapter(mainViewModel, listFoldersViewModel, folderRepository, VIEW_TYPE_LIST)
+    private val listFoldersViewModel: ListFoldersViewModel by viewModels { listFoldersViewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,30 +51,22 @@ class ListFoldersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.viewModelScope.launch {
-            createMainFolder()
+
+        val listFolderAdapter = ListFolderAdapter()
+        binding.recyclerViewFolders.adapter = listFolderAdapter
+
+        val layoutManagerFolders = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.recyclerViewFolders.layoutManager = layoutManagerFolders
+
+        // Обновляем список папок при изменении данных
+        viewLifecycleOwner.lifecycleScope.launch {
+            listFoldersViewModel.allFolders.collect { folders ->
+                listFolderAdapter.submitList(folders)
+            }
         }
         clickButtonBack()
         clickButtonNewFolder()
-
-        // Подписываемся на поток allFolders
-        lifecycleScope.launch {
-            viewModel.allFolders.collect { folders ->
-                // Здесь обновляем ScrollView
-                updateScrollView(folders)
-            }
-        }
-
     }
-
-    private suspend fun createMainFolder() {
-        val mainFolderName = "Все"
-        if (!doesFolderExist(mainFolderName)) {
-            val mainFolder = Folder(id = null, name = mainFolderName)
-            viewModel.insert(mainFolder)
-        }
-    }
-
 
     private fun clickButtonBack() {
         binding.buttonBack.setOnClickListener {
@@ -83,8 +75,7 @@ class ListFoldersFragment : Fragment() {
     }
 
     private fun clickButtonNewFolder() {
-        val buttonNewFolder = requireView().findViewById<Button>(R.id.newFolderButton)
-        buttonNewFolder.setOnClickListener {
+        binding.newFolderButton.setOnClickListener {
             showNewFolderDialog()
         }
     }
@@ -102,7 +93,7 @@ class ListFoldersFragment : Fragment() {
 
         builder.setPositiveButton("OK") { dialog, _ ->
             val folderName = input.text.toString()
-            viewModel.viewModelScope.launch {
+            listFoldersViewModel.viewModelScope.launch {
                 if (folderName.isNotEmpty() && !doesFolderExist(folderName)) {
                     createNewFolder(folderName)
                 } else {
@@ -122,31 +113,27 @@ class ListFoldersFragment : Fragment() {
     }
 
     private suspend fun doesFolderExist(folderName: String): Boolean {
-        val folders = viewModel.allFolders.first()
-        return folders.any { it.name == folderName } ?: false
+        var exists = false
+        listFoldersViewModel.allFolders.collect { folders ->
+            exists = folders.any { it.name == folderName }
+        }
+        return exists
     }
 
     private fun createNewFolder(folderName: String) {
         if (folderName.isBlank()) {
-            Toast.makeText(requireContext(), "Имя папки не может быть пустым", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Имя папки не может быть пустым", Toast.LENGTH_SHORT)
+                .show()
             return
         }
-        val newFolder = Folder(null,folderName,0,false)
-        viewModel.insert(newFolder)
-    }
-
-    private fun updateScrollView(folders: List<Folder>) {
-        binding.containerForItems.removeAllViews()
-        val inflater = LayoutInflater.from(context)
-        for (folder in folders) {
-            val folderView = createFolderView(inflater, folder)
-            binding.containerForItems.addView(folderView)
-        }
+        val newFolder = Folder(null, folderName, 0, false)
+        listFoldersViewModel.insert(newFolder)
     }
 
     private fun createFolderView(inflater: LayoutInflater, folder: Folder): View {
         // Создаем новый экземпляр представления папки
-        val folderView = inflater.inflate(R.layout.item_folder_to_list, binding.containerForItems, false)
+        val folderView =
+            inflater.inflate(R.layout.item_folder_to_list, binding.recyclerViewFolders, false)
 
         // Заполняем данные папки
         val folderNameTextView = folderView.findViewById<TextView>(R.id.folderName)
@@ -158,6 +145,10 @@ class ListFoldersFragment : Fragment() {
         return folderView
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     companion object {
     }

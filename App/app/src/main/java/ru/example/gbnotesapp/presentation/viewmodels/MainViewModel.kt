@@ -2,6 +2,8 @@ package ru.example.gbnotesapp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.data.db.FolderRepository
 import ru.example.gbnotesapp.data.db.NoteRepository
@@ -18,7 +20,15 @@ class MainViewModel @Inject constructor(
     val allNotes = noteRepository.getAllNotes()
 
     // LiveData для всех папок
-    val allFolders = folderRepository.getAllFolders()
+    private val _allFolders = MutableStateFlow<List<Folder>>(listOf())
+//    val allFolders = folderRepository.getAllFolders()
+    init {
+        viewModelScope.launch {
+            _allFolders.value = folderRepository.getAllFolders()
+        }
+    }
+
+    val allFolders: StateFlow<List<Folder>> = _allFolders
 
     // Функция для вставки новой заметки
     fun insert(note: Note) = viewModelScope.launch {
@@ -29,6 +39,4 @@ class MainViewModel @Inject constructor(
     fun insert(folder: Folder) = viewModelScope.launch {
         folderRepository.insert(folder)
     }
-
-
 }

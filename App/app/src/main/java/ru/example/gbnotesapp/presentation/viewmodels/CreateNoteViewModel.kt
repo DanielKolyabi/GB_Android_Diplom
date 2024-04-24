@@ -29,7 +29,10 @@ class CreateNoteViewModel @Inject constructor(
     private val _isNoteModified = MutableStateFlow(false)
     val isNoteModified: StateFlow<Boolean> = _isNoteModified
 
-    val allFolders = folderRepository.getAllFolders()
+    private val _allFolders = MutableStateFlow<List<Folder>>(listOf())
+    val allFolders: StateFlow<List<Folder>> = _allFolders
+
+//    val allFolders = folderRepository.getAllFolders()
 
     fun onTitleChanged(newTitle: String) {
         _note.value = _note.value.copy(title = newTitle)
