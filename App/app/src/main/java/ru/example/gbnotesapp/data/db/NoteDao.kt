@@ -15,7 +15,7 @@ interface NoteDao {
     fun getAllNotes(): Flow<List<Note>>
 
     @Query("SELECT * FROM note WHERE folderId = :folderId")
-    fun getNotesByFolder(folderId: Int): Flow<List<Note>>
+    suspend fun getNotesByFolder(folderId: Int): List<Note>
 
     @Insert
     suspend fun insert(note: Note)

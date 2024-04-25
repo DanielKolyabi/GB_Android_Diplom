@@ -51,7 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_below="@id/appBarLayout"
-        android:layout_above="@+id/newFolderButton" />
+        android:layout_above="@+id/newFolderButton"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/newFolderButton"

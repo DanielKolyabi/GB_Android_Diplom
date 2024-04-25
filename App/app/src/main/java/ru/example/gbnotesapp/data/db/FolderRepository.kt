@@ -21,7 +21,7 @@ class FolderRepository @Inject constructor(
     suspend fun update(folder: Folder) = folderDao.update(folder)
 
     // Получить папку по id
-    fun getFolderById(folderId: Int) = folderDao.getFolderById(folderId)
+    suspend fun getFolderById(folderId: Int) = folderDao.getFolderById(folderId)
 
     suspend fun updateNoteCount(folderId: Int) {
         val noteCount = noteDao.getNotesByFolder(folderId).count()
@@ -40,7 +40,7 @@ class FolderRepository @Inject constructor(
     }
 
     suspend fun setSelectedFolder(folder: Folder) {
-        val selectedFolder = getSelectedFolder().firstOrNull()
+        val selectedFolder = getSelectedFolder()
         if (selectedFolder != null) {
             // Сбросить флаг выбранной папки для текущей выбранной папки
             update(selectedFolder.copy(isSelected = false))
@@ -50,5 +50,5 @@ class FolderRepository @Inject constructor(
     }
 
     // Получить выбранную папку
-    fun getSelectedFolder() = folderDao.getSelectedFolder()
+    suspend fun getSelectedFolder() = folderDao.getSelectedFolder()
 }

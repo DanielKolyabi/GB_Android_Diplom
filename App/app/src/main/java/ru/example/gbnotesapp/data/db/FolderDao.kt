@@ -20,10 +20,10 @@ interface FolderDao {
 
 
     @Query("SELECT * FROM folder WHERE isSelected = 1")
-    fun getSelectedFolder(): Flow<Folder?>
+    suspend fun getSelectedFolder(): Folder?
 
     @Query("SELECT * FROM folder WHERE id = :folderId")
-    fun getFolderById(folderId: Int): Folder?
+    suspend fun getFolderById(folderId: Int): Folder?
 
     @Insert
     suspend fun insert(folder: Folder)

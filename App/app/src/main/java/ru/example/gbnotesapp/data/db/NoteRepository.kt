@@ -16,7 +16,7 @@ class NoteRepository @Inject constructor(
     fun getAllNotes() = noteDao.getAllNotes()
 
     // Получить заметки по id папки
-    private fun getNotesByFolder(folderId: Int) = noteDao.getNotesByFolder(folderId)
+//    private fun getNotesByFolder(folderId: Int) = noteDao.getNotesByFolder(folderId)
 
     // Вставить новую заметку
     suspend fun insert(note: Note) {
@@ -34,13 +34,14 @@ class NoteRepository @Inject constructor(
     }
 
     // Получить заметки из выбранной папки
-    suspend fun getNotesBySelectedFolder(): Flow<List<Note>> {
-        val selectedFolder = folderRepository.getSelectedFolder().first()
-        return if (selectedFolder?.id != null) {
-            getNotesByFolder(selectedFolder.id)
-        } else {
-            flowOf(emptyList())
-        }
+    suspend fun getNotesBySelectedFolder(folderId: Int): List<Note> {
+//        val selectedFolder = folderRepository.getSelectedFolder()
+//        return if (selectedFolder?.id != null) {
+//            getNotesByFolder(selectedFolder.id)
+//        } else {
+//            flowOf(emptyList())
+//        }
+        return noteDao.getNotesByFolder(folderId)
     }
 
 

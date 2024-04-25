@@ -49,7 +49,6 @@ class ListFolderViewHolder(
         binding.apply {
             folderName.text = folder.name
             noteCount.text = folder.noteCount.toString()
-
         }
     }
 }

@@ -1,2 +1,5 @@
 
-hkotlin:S125"Remove this commented out code.(¶Ÿ×¨ÿÿÿÿÿ8 ¬ñ1J$c6771e14-804f-40e9-a255-c3fac5ae752a
+6kotlin:S125"Remove this commented out code.(Ò‰¹
+bkotlin:S6313""EClasses extending "ViewModel" should not expose suspending functions.(†Ïıÿÿÿÿ
+=kotlin:S6305" Don't expose mutable flow types.(‡…ÛÏùÿÿÿÿ
+8kotlin:S6305" Don't expose mutable flow types.(ä¥¼Õ

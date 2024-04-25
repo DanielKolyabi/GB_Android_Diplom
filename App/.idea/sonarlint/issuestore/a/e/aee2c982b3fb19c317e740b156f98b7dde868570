@@ -1,6 +1,7 @@
 
-†kotlin:S1172W"AUse "_" instead of this unused lambda parameter "selectedFolder".(ºŞ‚†8Œ¯õ‹ñ1J$d1274f5a-2f02-47fe-a199-fafeb18e6aa8
-ckotlin:S125?"Remove this commented out code.(ºÓ–ğ8Ô”ñ1J$a1281e88-e03b-490f-ae2d-d10b106f8a16
-kotlin:S1144n"5Remove this unused private "createMainFolder" method.(î‰÷Èüÿÿÿÿ8×”ñ1J$73e1a2b8-a0c7-425c-bbe0-f36deaa87c98
-_kotlin:S1128
-"Remove this unused import.(ıÒ€©8Ü”ñ1J$f3342583-c8b1-4ced-bc8b-ccfd80ad0352
+akotlin:S125("Remove this commented out code.(³õÊ¹úÿÿÿÿJ$244da367-f4cf-494b-b85c-130f81c43478
+\kotlin:S125@"Remove this commented out code.(ºÓ–ğJ$a8ffd47f-df42-4f30-b84e-4fd5831ade71
+akotlin:S125_"Remove this commented out code.(°Âè»ıÿÿÿÿJ$0b4ff2e0-a079-4209-980d-437237f8dc93
+akotlin:S125m"Remove this commented out code.(°Âè»ıÿÿÿÿJ$80f88541-7da1-46ad-b747-e701d0da152c
+akotlin:S125|"Remove this commented out code.(š¦Š¸ûÿÿÿÿJ$c7de13a1-28f9-4d96-8378-9122e114bec5
+Xkotlin:S1128"Remove this unused import.(æÁ»ÉJ$2bf8bd14-370f-4332-bf3f-a6e21852e4fc

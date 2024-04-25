@@ -3,7 +3,9 @@ package ru.example.gbnotesapp.presentation.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.data.db.FolderRepository
 import ru.example.gbnotesapp.data.model.Folder
@@ -15,11 +17,13 @@ class ListFoldersViewModel @Inject constructor(
 
     // LiveData для всех папок
 //    var allFolders = folderRepository.getAllFolders()
-    val allFolders = MutableStateFlow<List<Folder>>(listOf())
+    private val _allFolders = MutableStateFlow<List<Folder>>(listOf())
+    val allFolders = _allFolders
 
     init {
         viewModelScope.launch {
-            allFolders.value = folderRepository.getAllFolders()
+            _allFolders.value = folderRepository.getAllFolders()
+//            createMainFolder()
         }
     }
 
@@ -36,4 +40,20 @@ class ListFoldersViewModel @Inject constructor(
             allFolders.value = folderRepository.getAllFolders()
         }
     }
+
+//    private fun createMainFolder() {
+//        viewModelScope.launch {
+//            val mainFolderName = "Все"
+//            val firstFolder = folderRepository.getFolderById(1)
+//            if (firstFolder == null) {
+//                val mainFolder = Folder(id = null, name = mainFolderName, isSelected = true)
+//                insert(mainFolder)
+//            }
+//        }
+//    }
+//    private suspend fun doesFolderExist(folderName: String): Boolean {
+//        val folders = folderRepository.getAllFolders()
+//        val firstFolder = folders.firstOrNull()
+//        return firstFolder?.name == folderName
+//    }
 }

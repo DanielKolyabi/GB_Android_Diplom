@@ -40,6 +40,7 @@ class ListFoldersFragment : Fragment() {
     @Inject
     lateinit var listFoldersViewModelFactory: ViewModelFactory
     private val listFoldersViewModel: ListFoldersViewModel by viewModels { listFoldersViewModelFactory }
+    private val listFolderAdapter: ListFolderAdapter = ListFolderAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,12 +52,13 @@ class ListFoldersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val listFolderAdapter = ListFolderAdapter()
+//        val layoutManagerFolders = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//        binding.recyclerViewFolders.layoutManager = layoutManagerFolders
+//        listFolderAdapter = ListFolderAdapter()
         binding.recyclerViewFolders.adapter = listFolderAdapter
 
-        val layoutManagerFolders = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.recyclerViewFolders.layoutManager = layoutManagerFolders
+//        val layoutManagerFolders = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//        binding.recyclerViewFolders.layoutManager = layoutManagerFolders
 
         // Обновляем список папок при изменении данных
         viewLifecycleOwner.lifecycleScope.launch {
@@ -93,7 +95,8 @@ class ListFoldersFragment : Fragment() {
 
         builder.setPositiveButton("OK") { dialog, _ ->
             val folderName = input.text.toString()
-            listFoldersViewModel.viewModelScope.launch {
+//            viewLifecycleOwner.lifecycleScope.launch {
+//            listFoldersViewModel.viewModelScope.launch {
                 if (folderName.isNotEmpty() && !doesFolderExist(folderName)) {
                     createNewFolder(folderName)
                 } else {
@@ -103,7 +106,7 @@ class ListFoldersFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            }
+//            }
             dialog.dismiss()
         }
 
@@ -112,12 +115,11 @@ class ListFoldersFragment : Fragment() {
         builder.show()
     }
 
-    private suspend fun doesFolderExist(folderName: String): Boolean {
-        var exists = false
-        listFoldersViewModel.allFolders.collect { folders ->
-            exists = folders.any { it.name == folderName }
-        }
-        return exists
+    private fun doesFolderExist(folderName: String): Boolean {
+//        var exists = false
+        val allListFolders = listFoldersViewModel.allFolders.value
+        return allListFolders.any { it.name == folderName }
+//        return exists
     }
 
     private fun createNewFolder(folderName: String) {
