@@ -52,13 +52,8 @@ class ListFoldersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val layoutManagerFolders = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-//        binding.recyclerViewFolders.layoutManager = layoutManagerFolders
-//        listFolderAdapter = ListFolderAdapter()
-        binding.recyclerViewFolders.adapter = listFolderAdapter
 
-//        val layoutManagerFolders = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-//        binding.recyclerViewFolders.layoutManager = layoutManagerFolders
+        binding.recyclerViewFolders.adapter = listFolderAdapter
 
         // Обновляем список папок при изменении данных
         viewLifecycleOwner.lifecycleScope.launch {
@@ -95,18 +90,15 @@ class ListFoldersFragment : Fragment() {
 
         builder.setPositiveButton("OK") { dialog, _ ->
             val folderName = input.text.toString()
-//            viewLifecycleOwner.lifecycleScope.launch {
-//            listFoldersViewModel.viewModelScope.launch {
-                if (folderName.isNotEmpty() && !doesFolderExist(folderName)) {
-                    createNewFolder(folderName)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Папка с таким названием уже существует",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-//            }
+            if (folderName.isNotEmpty() && !doesFolderExist(folderName)) {
+                createNewFolder(folderName)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Папка с таким названием уже существует",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
             dialog.dismiss()
         }
 
@@ -116,10 +108,8 @@ class ListFoldersFragment : Fragment() {
     }
 
     private fun doesFolderExist(folderName: String): Boolean {
-//        var exists = false
         val allListFolders = listFoldersViewModel.allFolders.value
         return allListFolders.any { it.name == folderName }
-//        return exists
     }
 
     private fun createNewFolder(folderName: String) {

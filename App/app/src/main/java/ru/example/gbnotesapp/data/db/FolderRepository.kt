@@ -10,7 +10,6 @@ class FolderRepository @Inject constructor(
     private val folderDao: FolderDao,
     private val noteDao: NoteDao
 ) {
-
     // Получить все папки
     suspend fun getAllFolders() = folderDao.getAllFolders()
 
@@ -48,6 +47,7 @@ class FolderRepository @Inject constructor(
         // Установить флаг выбранной папки для новой выбранной папки
         update(folder.copy(isSelected = true))
     }
+
 
     // Получить выбранную папку
     private suspend fun getSelectedFolder() = folderDao.getSelectedFolder()

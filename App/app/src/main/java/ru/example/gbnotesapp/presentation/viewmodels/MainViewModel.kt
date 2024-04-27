@@ -13,25 +13,34 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
     private val folderRepository: FolderRepository
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val _allNotesByFolder = MutableStateFlow<List<Note>>(listOf())
     val allNotesByFolder = _allNotesByFolder
 
-    // LiveData для всех заметок
     private val _allFolders = MutableStateFlow<List<Folder>>(listOf())
     val allFolders = _allFolders
+
     init {
         viewModelScope.launch {
             _allFolders.value = folderRepository.getAllFolders()
             createMainFolder()
-//            _allNotesByFolder.value = noteRepository.getNotesBySelectedFolder(1)
+            _allNotesByFolder.value = noteRepository.getNotesBySelectedFolder(1)
         }
     }
+
     fun changeListNote(folderId: Int) {
         viewModelScope.launch {
-            val notesInFolder = noteRepository.getNotesBySelectedFolder(folderId)
-            _allNotesByFolder.value = notesInFolder
+            val currentFolder = folderRepository.getFolderById(folderId)
+            if (currentFolder != null) {
+                folderRepository.setSelectedFolder(currentFolder)
+                val notesInFolder = if (currentFolder.id == 1)
+                    noteRepository.getAllNotes()
+                else
+                    noteRepository.getNotesBySelectedFolder(folderId)
+
+                _allNotesByFolder.value = notesInFolder
+            }
         }
     }
 

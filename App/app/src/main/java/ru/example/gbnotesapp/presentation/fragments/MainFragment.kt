@@ -61,6 +61,7 @@ class MainFragment : Fragment(), OnNoteClickListener {
         folderAdapter = FolderAdapter(onChangeShowNote = { idFolder ->
             viewLifecycleOwner.lifecycleScope.launch {
                 mainViewModel.changeListNote(idFolder)
+
             }
         }
         )

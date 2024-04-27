@@ -12,10 +12,12 @@ import ru.example.gbnotesapp.data.model.Note
 interface NoteDao {
 
     @Query("SELECT * FROM note")
-    fun getAllNotes(): Flow<List<Note>>
+//    fun getAllNotes(): Flow<List<Note>>
+    suspend fun getAllNotes(): List<Note>
 
     @Query("SELECT * FROM note WHERE folderId = :folderId")
     suspend fun getNotesByFolder(folderId: Int): List<Note>
+
 
     @Insert
     suspend fun insert(note: Note)

@@ -35,12 +35,14 @@ class FolderAdapter(
         holder.bind(currentFolder)
     }
 
-    inner class MainFolderViewHolder(val binding: ItemFolderToMainFragmentBinding) :
+    inner class MainFolderViewHolder(private val binding: ItemFolderToMainFragmentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(folder: Folder) {
             binding.buttonFolderInMainRecyclerView.text = folder.name
             binding.buttonFolderInMainRecyclerView.setOnClickListener {
                 folder.id?.let { it1 -> onChangeShowNote(it1) }
+
+
             }
         }
     }

@@ -2,6 +2,7 @@ package ru.example.gbnotesapp.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +50,7 @@ class ListFolderViewHolder(
         binding.apply {
             folderName.text = folder.name
             noteCount.text = folder.noteCount.toString()
+            checkmark.isVisible = folder.isSelected
         }
     }
 }
