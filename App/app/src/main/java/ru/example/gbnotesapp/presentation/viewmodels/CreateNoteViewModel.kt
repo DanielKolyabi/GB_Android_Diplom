@@ -3,6 +3,7 @@ package ru.example.gbnotesapp.presentation.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,7 +33,20 @@ class CreateNoteViewModel @Inject constructor(
     private val _allFolders = MutableStateFlow<List<Folder>>(listOf())
     val allFolders: StateFlow<List<Folder>> = _allFolders
 
-//    val allFolders = folderRepository.getAllFolders()
+    private val _allFolderNames = MutableStateFlow<List<String>>(emptyList())
+    val allFolderNames: StateFlow<List<String>> = _allFolderNames
+
+    private val _selectedFolder = MutableStateFlow<Folder?>(null)
+    val selectedFolder: StateFlow<Folder?> = _selectedFolder
+
+    init {
+        viewModelScope.launch {
+            val folderList = folderRepository.getAllFolders()
+            val folderNames = folderList.map { it.name }
+            _allFolderNames.value = folderNames
+            _allFolders.value = folderList
+        }
+    }
 
     fun onTitleChanged(newTitle: String) {
         _note.value = _note.value.copy(title = newTitle)
@@ -50,6 +64,7 @@ class CreateNoteViewModel @Inject constructor(
         return currentTime + currentDate
     }
 
+
     fun setCurrentNote(note: Note?) {
         _currentNote.value = note
         _note.value = note ?: Note(0, 0, "", "", "")
@@ -63,29 +78,38 @@ class CreateNoteViewModel @Inject constructor(
     fun onSaveNote() {
         viewModelScope.launch {
             val currentNote = _note.value
-            val noteWithCreationDate = if (_currentNote.value != null && _isNoteModified.value) {
-                // Если текущая заметка существует и была изменена, обновляем дату создания
-                val creationDate = getCreationDate()
-                currentNote.copy(creationDate = creationDate)
-            } else {
-                currentNote
-            }
+            val selectedFolder = _selectedFolder.value
+            if (selectedFolder != null) {
+                val noteWithFolderId = currentNote.copy(folderId = selectedFolder.id!!)
+                val noteWithCreationDate =
+                    if (_currentNote.value != null && _isNoteModified.value) {
+                        // Если текущая заметка существует и была изменена, обновляем дату создания
+                        val creationDate = getCreationDate()
+                        noteWithFolderId.copy(creationDate = creationDate)
+                    } else {
+                        noteWithFolderId
+                    }
 
-            if (_currentNote.value != null) {
-                // Если текущая заметка существует, обновляем ее
-                noteRepository.update(noteWithCreationDate)
-            } else {
-                // Если текущая заметка не существует, создаем новую
-                noteRepository.insert(noteWithCreationDate)
-                // Обновляем счетчик заметок в папке
-                folderRepository.updateNoteCount(noteWithCreationDate.folderId)
+                if (_currentNote.value != null) {
+                    // Если текущая заметка существует, обновляем ее
+                    noteRepository.update(noteWithCreationDate)
+                } else {
+                    // Если текущая заметка не существует, создаем новую
+                    noteRepository.insert(noteWithCreationDate)
+                    // Обновляем счетчик заметок в папке
+                    folderRepository.updateNoteCount(noteWithCreationDate.folderId)
+                }
             }
         }
     }
 
-    fun onFolderSelected(folder: Folder) {
-        if (folder.id != null) {
-            _note.value = _note.value.copy(folderId = folder.id)
+    fun onFolderSelected(position: Int) {
+        _selectedFolder.value = _allFolders.value[position]
+        viewModelScope.launch {
+            val selectedFolder = _selectedFolder.value
+            if (selectedFolder != null) {
+                folderRepository.setSelectedFolder(selectedFolder)
+            }
         }
     }
 }

@@ -15,10 +15,8 @@ class MainViewModel @Inject constructor(
     private val folderRepository: FolderRepository
     ) : ViewModel() {
 
-    // LiveData для всех папок
     private val _allNotesByFolder = MutableStateFlow<List<Note>>(listOf())
     val allNotesByFolder = _allNotesByFolder
-//    noteRepository.getNotesBySelectedFolder(1)
 
     // LiveData для всех заметок
     private val _allFolders = MutableStateFlow<List<Folder>>(listOf())
@@ -27,12 +25,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _allFolders.value = folderRepository.getAllFolders()
             createMainFolder()
-            _allNotesByFolder.value = noteRepository.getNotesBySelectedFolder(1)
+//            _allNotesByFolder.value = noteRepository.getNotesBySelectedFolder(1)
         }
     }
-
-    suspend fun changeListNote(idFolder: Int) {
-        _allNotesByFolder.value = noteRepository.getNotesBySelectedFolder(idFolder)
+    fun changeListNote(folderId: Int) {
+        viewModelScope.launch {
+            val notesInFolder = noteRepository.getNotesBySelectedFolder(folderId)
+            _allNotesByFolder.value = notesInFolder
+        }
     }
 
     // Функция для вставки новой заметки
@@ -57,7 +57,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    // Функция для обнавления
+    // Функция для обновления
     fun updateFolders() {
         viewModelScope.launch {
             allFolders.value = folderRepository.getAllFolders()

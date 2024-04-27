@@ -6,8 +6,6 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
-
-
 }
 
 android {
@@ -73,4 +71,5 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
 
+    implementation("com.google.android.material:material:1.11.0")
 }

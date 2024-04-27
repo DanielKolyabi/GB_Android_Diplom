@@ -7,8 +7,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -58,7 +58,6 @@ class CreateNoteFragment : Fragment() {
         val note = arguments?.getParcelable<Note>("note")
         viewModel.setCurrentNote(note)
 
-
         lifecycleScope.launch {
             val selectedFolderId = arguments?.getInt("selectedFolderId") ?: 0
             if (selectedFolderId != 0) {
@@ -77,56 +76,18 @@ class CreateNoteFragment : Fragment() {
             binding.textViewDate.text = note.creationDate
         }
 
-
-        folderAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item)
-        binding.spinnerFolders.adapter = folderAdapter
-
-        loadFolders()
-//
-//        binding.spinnerFolders.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-//                val selectedFolderName = parent.getItemAtPosition(position) as String
-//                lifecycleScope.launch {
-//                    viewModel.allFolders.collect { folders ->
-//                        val selectedFolder = folders.find { it.name == selectedFolderName }
-//                        if (selectedFolder != null) {
-//                            viewModel.onFolderSelected(selectedFolder)
-//                            binding.selectedFolder.text = selectedFolderName
-//                        }
-//                    }
-//                }
-//            }
-//            override fun onNothingSelected(parent: AdapterView<*>) {
-//                // Ничего не делать
-//            }
-//        }
-        binding.spinnerFolders.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View,
-                    position: Int,
-                    id: Long
-                ) {
-                    val selectedFolder = parent.getItemAtPosition(position) as Folder
-                    val selectedFolderName = selectedFolder.name
-                    lifecycleScope.launch {
-                        viewModel.allFolders.collect { folders ->
-                            val folder = folders.find { it.name == selectedFolderName }
-                            if (folder != null) {
-                                viewModel.onFolderSelected(folder)
-                                binding.selectedFolder.text = selectedFolderName
-                            }
-                        }
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                    // Ничего не делать
-                }
+        lifecycleScope.launch {
+            viewModel.allFolderNames.collect { folderNames ->
+                val adapter = ArrayAdapter(requireContext(), R.layout.item_folder_to_note_fragment, folderNames.toTypedArray())
+                (binding.containerListFolders.editText as? AutoCompleteTextView)?.setAdapter(adapter)
             }
+        }
 
-
+        binding.listFoldersAutoCompleteTextView.setOnItemClickListener(){_,_,position,_->
+            val selectedFolderName = viewModel.allFolderNames.value[position]
+            binding.selectedFolder.text = selectedFolderName
+            viewModel.onFolderSelected(position)
+        }
     }
 
     private fun setupButtonListeners() {
@@ -141,20 +102,18 @@ class CreateNoteFragment : Fragment() {
     private fun saveNoteAndNavigateBack() {
         lifecycleScope.launch {
             viewModel.onSaveNote()
-        }
-        lifecycleScope.launch {
-            val selectedFolder = binding.spinnerFolders.selectedItem as Folder
-            folderRepository.setSelectedFolder(selectedFolder)
+            val selectedFolder = viewModel.selectedFolder.value
+            if (selectedFolder != null) {
+                folderRepository.setSelectedFolder(selectedFolder)
+            }
         }
         navigateBack()
     }
 
     private fun setCurrentCreationDate() {
         lifecycleScope.launch {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val creationDate = viewModel.getCreationDate()
-                binding.textViewDate.text = creationDate
-            }
+            val creationDate = viewModel.getCreationDate()
+            binding.textViewDate.text = creationDate
         }
     }
 
@@ -189,31 +148,6 @@ class CreateNoteFragment : Fragment() {
             }
         })
     }
-
-//    private fun loadFolders() {
-//        lifecycleScope.launch {
-//            viewModel.allFolders.collect { folders ->
-//                folderAdapter.clear()
-////                val folderNames = folders.map { it.name }
-////                folderAdapter.addAll(folderNames)
-//                folderAdapter.addAll(folders)
-//                folderAdapter.notifyDataSetChanged()
-//            }
-//        }
-//    }
-
-    private fun loadFolders() {
-        lifecycleScope.launch {
-            viewModel.allFolders.collect { folders ->
-                folderAdapter.clear()
-//                val folderNames = folders.map { it.name }
-//                folderAdapter.addAll(folderNames)
-                folderAdapter.addAll(folders)
-                folderAdapter.notifyDataSetChanged()
-            }
-        }
-    }
-
 
 
     override fun onDestroyView() {

@@ -16,7 +16,6 @@ interface FolderDao {
     suspend fun getAllFolders(): List<Folder>
 
 //    fun getAllFolders(): Flow<List<Folder>>
-    
 
 
     @Query("SELECT * FROM folder WHERE isSelected = 1")

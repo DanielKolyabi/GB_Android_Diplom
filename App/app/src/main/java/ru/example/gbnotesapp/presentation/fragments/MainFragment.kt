@@ -37,15 +37,6 @@ class MainFragment : Fragment(), OnNoteClickListener {
     lateinit var mainViewModelFactory: ViewModelFactory
     private val mainViewModel: MainViewModel by viewModels { mainViewModelFactory }
 
-//    @Inject
-//    lateinit var listFoldersViewModelFactory: ViewModelFactory
-//    private val listFoldersViewModel: ListFoldersViewModel by viewModels { listFoldersViewModelFactory }
-
-    @Inject
-    lateinit var folderRepository: FolderRepository
-
-    @Inject
-    lateinit var noteRepository: NoteRepository
     private lateinit var noteAdapter: NoteAdapter
     private lateinit var folderAdapter: FolderAdapter
 
@@ -61,20 +52,11 @@ class MainFragment : Fragment(), OnNoteClickListener {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel.updateFolders()
 
-//        listFoldersViewModel.viewModelScope.launch {
-//            createMainFolder()
-//        }
-
         noteAdapter = NoteAdapter(this)
         binding.recyclerViewNotes.adapter = noteAdapter
 
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.recyclerViewNotes.layoutManager = layoutManager
-
-        val layoutManagerFolders =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
-        binding.recyclerViewFolders.layoutManager = layoutManagerFolders
 
         folderAdapter = FolderAdapter(onChangeShowNote = { idFolder ->
             viewLifecycleOwner.lifecycleScope.launch {
@@ -84,6 +66,10 @@ class MainFragment : Fragment(), OnNoteClickListener {
         )
         binding.recyclerViewFolders.adapter = folderAdapter
 
+        val layoutManagerFolders =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        binding.recyclerViewFolders.layoutManager = layoutManagerFolders
 
         // Обновляем список заметок при изменении данных
         viewLifecycleOwner.lifecycleScope.launch {
@@ -92,24 +78,12 @@ class MainFragment : Fragment(), OnNoteClickListener {
             }
         }
 
-//        viewLifecycleOwner.lifecycleScope.launch {
-////            folderRepository.getSelectedFolder().collect { selectedFolder ->
-//            val notesInSelectedFolder = noteRepository.getNotesBySelectedFolder().first()
-//            noteAdapter.submitList(notesInSelectedFolder)
-////            }
-//        }
-
         // Обновляем список папок при изменении данных
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.allFolders.collect { folders ->
                 folderAdapter.submitList(folders)
             }
         }
-
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            createMainFolder()
-//        }
-
 
         binding.buttonCreateNewNote.setOnClickListener {
             findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment)
@@ -120,21 +94,6 @@ class MainFragment : Fragment(), OnNoteClickListener {
         }
 
     }
-
-//    private suspend fun createMainFolder() {
-//        val mainFolderName = "Все"
-//        if (!doesFolderExist(mainFolderName)) {
-//            val mainFolder = Folder(id = null, name = mainFolderName, isSelected = true)
-//            listFoldersViewModel.insert(mainFolder)
-//        }
-//    }
-//    private suspend fun doesFolderExist(folderName: String): Boolean {
-//        val folders = listFoldersViewModel.allFolders
-////        delay(500)
-//        val firstFolder = folders.first()
-//        return firstFolder.any { it.name == folderName } ?: false
-//    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

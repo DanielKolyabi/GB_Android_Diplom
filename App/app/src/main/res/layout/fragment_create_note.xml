@@ -28,9 +28,9 @@
             android:id="@+id/selectedFolder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/button_done"
@@ -45,14 +45,27 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <Spinner
-        android:id="@+id/spinner_folders"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/container_list_folders"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        android:layout_margin="8dp"
+        android:hint="Выберите папку"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:startIconDrawable="@drawable/outline_folders_24"
+        >
+        <AutoCompleteTextView
+            android:id="@+id/listFolders_autoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:text="Папка"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            tools:ignore="LabelFor,MissingConstraints" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <EditText
         android:id="@+id/editText_title"
@@ -68,7 +81,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_folders" />
+        app:layout_constraintTop_toBottomOf="@+id/container_list_folders" />
 
     <TextView
         android:id="@+id/textView_date"

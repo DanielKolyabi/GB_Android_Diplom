@@ -41,3 +41,7 @@ Happ/src/main/java/ru/example/gbnotesapp/presentation/ViewModelFactory.kt,9\c\9
 .app/src/main/java/ru/example/gbnotesapp/App.kt,d\c\dc3e3046cdec5a027c0b3e9491a4da81d1a2b6a1
 c
 3app/src/main/java/ru/example/gbnotesapp/DbModule.kt,2\c\2c4506424a81f1a1ea40918b47cb9e2bb291525a
+D
+app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
+@
+build.gradle.kts,d\b\dbcff70658daf80b53ce624f6adcaa529df5ed8d

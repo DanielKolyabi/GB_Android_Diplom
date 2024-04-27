@@ -27,7 +27,7 @@ class FolderRepository @Inject constructor(
         val noteCount = noteDao.getNotesByFolder(folderId).count()
         val folder = folderDao.getFolderById(folderId)
         if (folder != null) {
-            val updatedFolder = folder.copy(noteCount = noteCount)
+            val updatedFolder = folder.copy(noteCount = noteCount+1)
             folderDao.update(updatedFolder)
         }
     }
@@ -50,5 +50,5 @@ class FolderRepository @Inject constructor(
     }
 
     // Получить выбранную папку
-    suspend fun getSelectedFolder() = folderDao.getSelectedFolder()
+    private suspend fun getSelectedFolder() = folderDao.getSelectedFolder()
 }
