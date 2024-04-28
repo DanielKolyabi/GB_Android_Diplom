@@ -2,13 +2,18 @@ package ru.example.gbnotesapp.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.PrimaryKey
+import ru.example.gbnotesapp.R
 import ru.example.gbnotesapp.data.model.Note
 import ru.example.gbnotesapp.databinding.ItemNoteToMainFragmentBinding
 
-class NoteAdapter(private val listener: OnNoteClickListener) : ListAdapter<Note, NoteViewHolder>(
+class NoteAdapter(
+    private val clickNote: (note: Note) -> Unit
+) : ListAdapter<Note, NoteAdapter.NoteViewHolder>(
     DiffUtilCallback()
 ) {
 
@@ -18,13 +23,30 @@ class NoteAdapter(private val listener: OnNoteClickListener) : ListAdapter<Note,
             parent,
             false
         )
-        return NoteViewHolder(binding, listener)
+        return NoteViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val currentNote = getItem(position)
         holder.bind(currentNote)
     }
+
+    inner class NoteViewHolder(
+        private val binding: ItemNoteToMainFragmentBinding,
+    ) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(note: Note) {
+            binding.apply {
+                noteTitle.text = note.title
+                noteContent.text = note.content
+                noteDate.text = note.creationDate.toString()
+                root.setOnClickListener {
+                    clickNote(note)
+                }
+            }
+        }
+    }
+
 }
 
 class DiffUtilCallback : DiffUtil.ItemCallback<Note>() {
@@ -35,25 +57,3 @@ class DiffUtilCallback : DiffUtil.ItemCallback<Note>() {
         oldItem == newItem
 }
 
-
-class NoteViewHolder(
-    private val binding: ItemNoteToMainFragmentBinding,
-    private val listener: OnNoteClickListener
-) :
-    RecyclerView.ViewHolder(binding.root) {
-    fun bind(note: Note) {
-        binding.apply {
-            noteTitle.text = note.title
-            noteContent.text = note.content
-            noteDate.text = note.creationDate.toString()
-            root.setOnClickListener {
-                listener.onNoteClick(note)
-//                it.findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment)
-            }
-        }
-    }
-}
-
-interface OnNoteClickListener {
-    fun onNoteClick(note: Note)
-}

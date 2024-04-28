@@ -15,8 +15,8 @@ class NoteRepository @Inject constructor(
     // Получить все заметки
     suspend fun getAllNotes() = noteDao.getAllNotes()
 
-    // Получить заметки по id папки
-//    private fun getNotesByFolder(folderId: Int) = noteDao.getNotesByFolder(folderId)
+    // Получить заметку по id
+    suspend fun getNoteById(noteId: Int) = noteDao.getNoteById(noteId)
 
     // Вставить новую заметку
     suspend fun insert(note: Note) {

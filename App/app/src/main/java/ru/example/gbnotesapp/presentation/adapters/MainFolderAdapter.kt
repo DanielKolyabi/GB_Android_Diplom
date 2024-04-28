@@ -42,7 +42,6 @@ class FolderAdapter(
             binding.buttonFolderInMainRecyclerView.setOnClickListener {
                 folder.id?.let { it1 -> onChangeShowNote(it1) }
 
-
             }
         }
     }

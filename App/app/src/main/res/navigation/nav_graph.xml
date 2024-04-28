@@ -17,10 +17,8 @@
             app:exitAnim="@android:anim/fade_out"
             app:popUpTo="@id/mainFragment">
             <argument
-                android:name="folderId"
-                android:defaultValue="0"
-                app:argType="integer"
-                app:nullable="false" />
+                android:name="clickedNote"
+                app:argType="ru.example.gbnotesapp.data.model.Note"/>
         </action>
 
         <action
@@ -37,10 +35,8 @@
         android:name="ru.example.gbnotesapp.presentation.fragments.CreateNoteFragment"
         tools:layout="@layout/fragment_create_note">
         <argument
-            android:name="folderId"
-            android:defaultValue="0"
-            app:argType="integer"
-            app:nullable="false" />
+            android:name="clickedNote"
+            app:argType="ru.example.gbnotesapp.data.model.Note"/>
         <action
             android:id="@+id/action_createNoteFragment_to_MainFragment"
             app:destination="@id/mainFragment"

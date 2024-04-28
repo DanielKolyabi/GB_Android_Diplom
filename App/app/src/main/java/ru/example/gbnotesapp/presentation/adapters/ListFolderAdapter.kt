@@ -11,12 +11,6 @@ import ru.example.gbnotesapp.databinding.ItemFolderToListBinding
 
 class ListFolderAdapter(
 ) : ListAdapter<Folder, ListFolderViewHolder>(ListFolderDiffUtilCallback()) {
-//
-//    private var folders: List<Folder> = listOf()
-//
-//    fun setFolders(folders: List<Folder>) {
-//        submitList(folders)
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListFolderViewHolder {
         val binding = ItemFolderToListBinding.inflate(

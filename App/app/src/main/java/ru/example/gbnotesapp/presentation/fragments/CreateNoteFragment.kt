@@ -1,6 +1,5 @@
 package ru.example.gbnotesapp.presentation.fragments
 
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -40,6 +39,8 @@ class CreateNoteFragment : Fragment() {
     @Inject
     lateinit var folderRepository: FolderRepository
 
+    private lateinit var note: Note
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,9 +56,9 @@ class CreateNoteFragment : Fragment() {
         setEditTextTitleTextChangedListener()
         setEditTextContentTextChangedListener()
 
-        val note = arguments?.getParcelable<Note>("note")
-        viewModel.setCurrentNote(note)
+        note = arguments?.getParcelable<Note>("clickedNote")!!
 
+        // TODO отображение имени выбранной папки сразу - не работает пока
         lifecycleScope.launch {
             val selectedFolderId = arguments?.getInt("selectedFolderId") ?: 0
             if (selectedFolderId != 0) {
@@ -71,6 +72,7 @@ class CreateNoteFragment : Fragment() {
             viewModel.createNewNote()
             setCurrentCreationDate()
         } else {
+//            viewModel.setCurrentNote(note)
             binding.editTextTitle.setText(note.title)
             binding.editTextContent.setText(note.content)
             binding.textViewDate.text = note.creationDate
@@ -78,12 +80,18 @@ class CreateNoteFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.allFolderNames.collect { folderNames ->
-                val adapter = ArrayAdapter(requireContext(), R.layout.item_folder_to_note_fragment, folderNames.toTypedArray())
-                (binding.containerListFolders.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    R.layout.item_folder_to_note_fragment,
+                    folderNames.toTypedArray()
+                )
+                (binding.containerListFolders.editText as? AutoCompleteTextView)?.setAdapter(
+                    adapter
+                )
             }
         }
 
-        binding.listFoldersAutoCompleteTextView.setOnItemClickListener(){_,_,position,_->
+        binding.listFoldersAutoCompleteTextView.setOnItemClickListener() { _, _, position, _ ->
             val selectedFolderName = viewModel.allFolderNames.value[position]
             binding.selectedFolder.text = selectedFolderName
             viewModel.onFolderSelected(position)
@@ -119,7 +127,12 @@ class CreateNoteFragment : Fragment() {
 
     private fun setEditTextTitleTextChangedListener() {
         binding.editTextTitle.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
                 // Ничего не делать
             }
 
@@ -135,7 +148,12 @@ class CreateNoteFragment : Fragment() {
 
     private fun setEditTextContentTextChangedListener() {
         binding.editTextContent.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
                 // Ничего не делать
             }
 

@@ -25,7 +25,9 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _allFolders.value = folderRepository.getAllFolders()
             createMainFolder()
-            _allNotesByFolder.value = noteRepository.getNotesBySelectedFolder(1)
+            // TODO - либо удалить, либо оставить 1 из вариантов
+//            _allNotesByFolder.value = noteRepository.getNotesBySelectedFolder(1)
+//            _allNotesByFolder.value = noteRepository.getAllNotes()
         }
     }
 

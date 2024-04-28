@@ -1,6 +1,5 @@
 package ru.example.gbnotesapp.presentation.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
@@ -64,8 +63,15 @@ class CreateNoteViewModel @Inject constructor(
         return currentTime + currentDate
     }
 
+    fun getNoteById(noteId: Int) {
+        viewModelScope.launch {
+            val note = noteRepository.getNoteById(noteId)
+            _currentNote.value = note
+            _note.value = note ?: Note(0, 0, "", "", "")
+        }
+    }
 
-    fun setCurrentNote(note: Note?) {
+    fun setCurrentNote(note: Note) {
         _currentNote.value = note
         _note.value = note ?: Note(0, 0, "", "", "")
     }
