@@ -49,6 +49,12 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel.updateFolders()
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            mainViewModel.selectedFolder.collect { selectedFolder ->
+                binding.currentFolderName.text = selectedFolder?.name ?: "Все"
+            }
+        }
+
         val sharedPreferences =
             requireActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
         val selectedFolderId = sharedPreferences.getInt("selectedFolderId", 0)
@@ -56,7 +62,6 @@ class MainFragment : Fragment() {
 
         noteAdapter = NoteAdapter(
             clickNote = { note -> onNoteClick(note) },
-
             // TODO Новый тестовый функционал удаления заметки по долгому нажатию
             longClickNote = { note -> onNoteLongClick(note) }
         )

@@ -11,10 +11,12 @@ import ru.example.gbnotesapp.data.model.Note
 @Dao
 interface NoteDao {
 
-    @Query("SELECT * FROM note")
+    @Query("SELECT * FROM note ORDER BY creationDate DESC")
     suspend fun getAllNotes(): List<Note>
 
-    @Query("SELECT * FROM note WHERE folderId = :folderId")
+
+    // TODO добавил ORDER BY creationDate DESC в запрос для сортировки - тестирую
+    @Query("SELECT * FROM note WHERE folderId = :folderId ORDER BY creationDate DESC")
     suspend fun getNotesByFolder(folderId: Int): List<Note>
 
     @Query("SELECT * FROM note WHERE id = :noteId")

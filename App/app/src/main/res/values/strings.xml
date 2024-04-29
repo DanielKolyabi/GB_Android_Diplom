@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GB Notes App</string>
+    <string name="app_name">GB Notes</string>
     <string name="Search_Notes">Поиск заметок</string>
     <string name="note_title">Заголовок заметки</string>
     <string name="note_content">Содержимое заметки</string>

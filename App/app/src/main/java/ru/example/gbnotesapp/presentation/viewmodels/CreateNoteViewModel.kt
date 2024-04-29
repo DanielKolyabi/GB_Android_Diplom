@@ -65,6 +65,8 @@ class CreateNoteViewModel @Inject constructor(
         return currentTime + currentDate
     }
 
+
+    //TODO Удалить
     fun getNoteById(noteId: Int) {
         viewModelScope.launch {
             val note = noteRepository.getNoteById(noteId)
@@ -93,31 +95,34 @@ class CreateNoteViewModel @Inject constructor(
         viewModelScope.launch {
             val currentNote = _note.value
 
-            val selectedFolder = _selectedFolder.value
-            if (selectedFolder != null) {
-                val noteWithFolderId = currentNote.copy(folderId = selectedFolder.id!!)
+            var selectedFolder = _selectedFolder.value
 
-                val noteWithCreationDate =
-                    if (_currentNote.value != null && _isNoteModified.value) {
-                        // Если текущая заметка существует и была изменена, обновляем дату создания
-                        val creationDate = getCreationDate()
-                        noteWithFolderId.copy(creationDate = creationDate)
-                    } else {
-                        noteWithFolderId
-                    }
-
-                if (_isNewNote.value) {
-                    // Если создается новая заметка, вставляем ее
-                    noteRepository.insert(noteWithCreationDate)
-                    // Обновляем счетчик заметок в папке
-
-                    folderRepository.increaseNoteCount(noteWithCreationDate.folderId)
-                    folderRepository.update(selectedFolder)
-                } else {
-                    // Если редактируется существующая заметка, обновляем ее
-                    noteRepository.update(noteWithCreationDate)
-                }
+            if (selectedFolder == null) {
+                selectedFolder = folderRepository.getFolderById(1)
+                _selectedFolder.value = selectedFolder
             }
+
+            val noteWithFolderId = currentNote.copy(folderId = selectedFolder?.id!!)
+            val noteWithCreationDate =
+                if (_currentNote.value != null && _isNoteModified.value) {
+                    // Если текущая заметка существует и была изменена, обновляем дату создания
+                    val creationDate = getCreationDate()
+                    noteWithFolderId.copy(creationDate = creationDate)
+                } else {
+                    noteWithFolderId
+                }
+
+            if (_isNewNote.value) {
+                // Если создается новая заметка, вставляем ее
+                noteRepository.insert(noteWithCreationDate)
+                // Обновляем счетчик заметок в папке
+                folderRepository.increaseNoteCount(noteWithCreationDate.folderId)
+                folderRepository.update(selectedFolder)
+            } else {
+                // Если редактируется существующая заметка, обновляем ее
+                noteRepository.update(noteWithCreationDate)
+            }
+
         }
     }
 

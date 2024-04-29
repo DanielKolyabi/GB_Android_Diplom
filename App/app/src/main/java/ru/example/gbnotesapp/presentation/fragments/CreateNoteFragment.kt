@@ -67,6 +67,11 @@ class CreateNoteFragment : Fragment() {
         if (note == null) {
             viewModel.createNewNote()
             setCurrentCreationDate()
+            lifecycleScope.launch {
+                val mainFolder = folderRepository.getMainFolder()
+                viewModel.setSelectedFolder(mainFolder!!)
+                binding.selectedFolder.text = mainFolder.name
+            }
         } else {
             viewModel.setCurrentNote(note)
             binding.editTextTitle.setText(note.title)

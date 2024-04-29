@@ -43,6 +43,7 @@ class MainViewModel @Inject constructor(
             val currentFolder = folderRepository.getFolderById(folderId)
             if (currentFolder != null) {
                 folderRepository.setSelectedFolder(currentFolder)
+                _selectedFolder.value = currentFolder
                 val notesInFolder = if (currentFolder.id == 1)
                     noteRepository.getAllNotes()
                 else
@@ -53,14 +54,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    // Функция для вставки новой заметки
-    // TODO Наверное надо удалить этот метод
-    fun insertNote(note: Note) = viewModelScope.launch {
-        noteRepository.insert(note)
-    }
-
     // Функция для вставки новой папки
-    fun insertFolder(folder: Folder) = viewModelScope.launch {
+    private fun insertFolder(folder: Folder) = viewModelScope.launch {
         folderRepository.insert(folder)
         updateFolders()
     }
