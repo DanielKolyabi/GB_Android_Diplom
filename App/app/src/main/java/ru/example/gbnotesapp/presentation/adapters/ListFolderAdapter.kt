@@ -10,7 +10,8 @@ import ru.example.gbnotesapp.data.model.Folder
 import ru.example.gbnotesapp.databinding.ItemFolderToListBinding
 
 class ListFolderAdapter(
-    private val onFolderClick: (Folder) -> Unit
+    private val onFolderClick: (Folder) -> Unit,
+    private val onFolderLongClick: (Folder) -> Unit
 ) : ListAdapter<Folder, ListFolderViewHolder>(ListFolderDiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListFolderViewHolder {
@@ -26,9 +27,12 @@ class ListFolderAdapter(
         val currentFolder = getItem(position)
         holder.bind(currentFolder)
         holder.itemView.setOnClickListener { onFolderClick(currentFolder) }
+        holder.itemView.setOnLongClickListener {
+            onFolderLongClick(currentFolder)
+            true
+        }
     }
 
-//    override fun getItemCount(): Int = folders.size
 }
 
 class ListFolderDiffUtilCallback : DiffUtil.ItemCallback<Folder>() {

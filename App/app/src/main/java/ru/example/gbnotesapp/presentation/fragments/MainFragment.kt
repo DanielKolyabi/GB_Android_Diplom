@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -23,7 +24,7 @@ import ru.example.gbnotesapp.presentation.adapters.NoteAdapter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : Fragment(){
+class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding
@@ -48,13 +49,16 @@ class MainFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         mainViewModel.updateFolders()
 
-        val sharedPreferences = requireActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
         val selectedFolderId = sharedPreferences.getInt("selectedFolderId", 0)
         mainViewModel.changeListNote(selectedFolderId)
 
-
         noteAdapter = NoteAdapter(
-            clickNote = {note ->  onNoteClick(note)}
+            clickNote = { note -> onNoteClick(note) },
+
+            // TODO Новый тестовый функционал удаления заметки по долгому нажатию
+            longClickNote = { note -> onNoteLongClick(note) }
         )
         binding.recyclerViewNotes.adapter = noteAdapter
 
@@ -96,10 +100,6 @@ class MainFragment : Fragment(){
             }
         }
 
-
-
-
-
         binding.buttonCreateNewNote.setOnClickListener {
             findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment)
         }
@@ -107,7 +107,6 @@ class MainFragment : Fragment(){
         binding.buttonNavigationToFolders.setOnClickListener {
             findNavController().navigate(R.id.action_MainFragment_to_ListFoldersFragment)
         }
-
     }
 
     override fun onDestroyView() {
@@ -115,10 +114,22 @@ class MainFragment : Fragment(){
         _binding = null
     }
 
-   private fun onNoteClick(note: Note) {
+    private fun onNoteClick(note: Note) {
         val bundle = Bundle().apply {
             putParcelable("clickedNote", note)
         }
         findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment, bundle)
     }
+
+    private fun onNoteLongClick(note: Note) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Удалить заметку?")
+            .setMessage("Вы уверены, что хотите удалить эту заметку?")
+            .setPositiveButton("Да") { _, _ ->
+                mainViewModel.deleteNote(note)
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
+    }
+
 }

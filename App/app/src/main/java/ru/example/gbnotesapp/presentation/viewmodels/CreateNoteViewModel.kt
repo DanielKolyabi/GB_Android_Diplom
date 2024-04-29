@@ -1,8 +1,6 @@
 package ru.example.gbnotesapp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -113,7 +111,7 @@ class CreateNoteViewModel @Inject constructor(
                     noteRepository.insert(noteWithCreationDate)
                     // Обновляем счетчик заметок в папке
 
-                    folderRepository.updateNoteCount(noteWithCreationDate.folderId)
+                    folderRepository.increaseNoteCount(noteWithCreationDate.folderId)
                     folderRepository.update(selectedFolder)
                 } else {
                     // Если редактируется существующая заметка, обновляем ее

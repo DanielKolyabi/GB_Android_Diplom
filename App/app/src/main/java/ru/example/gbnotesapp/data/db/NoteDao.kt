@@ -20,7 +20,6 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE id = :noteId")
     suspend fun getNoteById(noteId: Int): Note
 
-
     @Insert
     suspend fun insert(note: Note)
 
@@ -29,4 +28,7 @@ interface NoteDao {
 
     @Delete
     suspend fun delete(note: Note)
+
+    @Query("DELETE FROM note WHERE folderId = :folderId")
+    suspend fun deleteNotesInFolder(folderId: Int)
 }

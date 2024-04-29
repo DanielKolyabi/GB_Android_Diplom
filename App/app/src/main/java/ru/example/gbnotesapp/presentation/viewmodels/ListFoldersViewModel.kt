@@ -37,10 +37,10 @@ class ListFoldersViewModel @Inject constructor(
         }
     }
 
-    // TODO возможно можно удалить
-//    fun setSelectedFolder(folder: Folder) {
-//        viewModelScope.launch {
-//            folderRepository.setSelectedFolder(folder)
-//        }
-//    }
+    fun deleteFolder(folder: Folder) = viewModelScope.launch {
+        folderRepository.deleteFolder(folder)
+        _allFolders.value = folderRepository.getAllFolders()
+    }
+
+
 }

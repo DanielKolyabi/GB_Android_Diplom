@@ -26,12 +26,16 @@ class MainViewModel @Inject constructor(
     private val _selectedFolder = MutableStateFlow<Folder?>(null)
     val selectedFolder: StateFlow<Folder?> = _selectedFolder
 
-
     init {
         viewModelScope.launch {
             _allFolders.value = folderRepository.getAllFolders()
             createMainFolder()
         }
+    }
+
+    fun deleteNote(note: Note) = viewModelScope.launch {
+        noteRepository.delete(note)
+        _allNotesByFolder.value = noteRepository.getAllNotes()
     }
 
     fun changeListNote(folderId: Int) {
@@ -49,12 +53,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-//    fun setSelectedFolder(folder: Folder) {
-//        _selectedFolder.value = folder
-//    }
-
-
     // Функция для вставки новой заметки
+    // TODO Наверное надо удалить этот метод
     fun insertNote(note: Note) = viewModelScope.launch {
         noteRepository.insert(note)
     }

@@ -12,7 +12,8 @@ import ru.example.gbnotesapp.data.model.Note
 import ru.example.gbnotesapp.databinding.ItemNoteToMainFragmentBinding
 
 class NoteAdapter(
-    private val clickNote: (note: Note) -> Unit
+    private val clickNote: (note: Note) -> Unit,
+    private val longClickNote: (note: Note) -> Unit
 ) : ListAdapter<Note, NoteAdapter.NoteViewHolder>(
     DiffUtilCallback()
 ) {
@@ -42,6 +43,10 @@ class NoteAdapter(
                 noteDate.text = note.creationDate.toString()
                 root.setOnClickListener {
                     clickNote(note)
+                }
+                root.setOnLongClickListener {
+                    longClickNote(note)
+                    true
                 }
             }
         }

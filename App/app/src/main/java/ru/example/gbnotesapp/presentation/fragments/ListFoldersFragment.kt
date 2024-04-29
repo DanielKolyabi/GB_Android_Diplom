@@ -8,22 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.R
-import ru.example.gbnotesapp.data.db.FolderRepository
-import ru.example.gbnotesapp.data.db.NoteRepository
 import ru.example.gbnotesapp.data.model.Folder
 import ru.example.gbnotesapp.databinding.FragmentListFoldersBinding
 import ru.example.gbnotesapp.presentation.ViewModelFactory
@@ -43,15 +36,19 @@ class ListFoldersFragment : Fragment() {
     private val listFoldersViewModel: ListFoldersViewModel by viewModels { listFoldersViewModelFactory }
 
     // TODO попытка 2
-    private val listFolderAdapter: ListFolderAdapter = ListFolderAdapter { folder ->
-        val sharedPreferences = requireActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putInt("selectedFolderId", folder.id!!)
-        editor.apply()
-
-        findNavController().navigate(R.id.action_ListFoldersFragment_to_MainFragment)
-    }
-
+    private val listFolderAdapter: ListFolderAdapter = ListFolderAdapter(
+        onFolderClick = { folder ->
+            val sharedPreferences =
+                requireActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putInt("selectedFolderId", folder.id!!)
+            editor.apply()
+            findNavController().navigate(R.id.action_ListFoldersFragment_to_MainFragment)
+        },
+        onFolderLongClick = { folder ->
+            onFolderLongClick(folder)
+        }
+    )
 
 
     override fun onCreateView(
@@ -133,9 +130,20 @@ class ListFoldersFragment : Fragment() {
         listFoldersViewModel.insert(newFolder)
     }
 
+    private fun onFolderLongClick(folder: Folder) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Удалить папку?")
+            .setMessage("Вы уверены, что хотите удалить эту папку и все заметки в ней?")
+            .setPositiveButton("Да") { _, _ ->
+                listFoldersViewModel.deleteFolder(folder)
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

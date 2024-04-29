@@ -19,7 +19,17 @@ class FolderRepository @Inject constructor(
     // Получить папку по id
     suspend fun getFolderById(folderId: Int) = folderDao.getFolderById(folderId)
 
-    suspend fun updateNoteCount(folderId: Int) {
+    suspend fun increaseNoteCount(folderId: Int) {
+        val noteCount = noteDao.getNotesByFolder(folderId).count()
+        val newNoteCount = noteCount+1
+        val folder = folderDao.getFolderById(folderId)
+        if (folder != null) {
+            val updatedFolder = folder.copy(noteCount = newNoteCount)
+            folderDao.update(updatedFolder)
+        }
+    }
+
+    suspend fun reduceNoteCount(folderId: Int) {
         val noteCount = noteDao.getNotesByFolder(folderId).count()
         val newNoteCount = noteCount+1
         val folder = folderDao.getFolderById(folderId)
@@ -30,9 +40,10 @@ class FolderRepository @Inject constructor(
     }
 
     // Удалить папку
-    suspend fun delete(folder: Folder) {
+    suspend fun deleteFolder(folder: Folder) {
         if (folder.name != "Все") {
             folderDao.delete(folder)
+            noteDao.deleteNotesInFolder(folder.id!!)
         }
     }
 
@@ -45,7 +56,6 @@ class FolderRepository @Inject constructor(
         // Установить флаг выбранной папки для новой выбранной папки
         update(folder.copy(isSelected = true))
     }
-
 
     // Получить выбранную папку
     private suspend fun getSelectedFolder() = folderDao.getSelectedFolder()
