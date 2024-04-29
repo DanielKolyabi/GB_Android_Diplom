@@ -39,9 +39,6 @@ class CreateNoteFragment : Fragment() {
     @Inject
     lateinit var folderRepository: FolderRepository
 
-    private lateinit var note: Note
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,11 +53,11 @@ class CreateNoteFragment : Fragment() {
         setEditTextTitleTextChangedListener()
         setEditTextContentTextChangedListener()
 
-        note = arguments?.getParcelable<Note>("clickedNote")!!
+        val note = arguments?.getParcelable<Note>("clickedNote")
 
         // TODO отображение имени выбранной папки сразу - не работает пока
         lifecycleScope.launch {
-            val selectedFolderId = arguments?.getInt("selectedFolderId") ?: 0
+            val selectedFolderId = note?.folderId ?: 0
             if (selectedFolderId != 0) {
                 val selectedFolder = selectedFolderId.let { folderRepository.getFolderById(it) }
                 binding.selectedFolder.text = selectedFolder?.name
@@ -72,7 +69,7 @@ class CreateNoteFragment : Fragment() {
             viewModel.createNewNote()
             setCurrentCreationDate()
         } else {
-//            viewModel.setCurrentNote(note)
+            viewModel.setCurrentNote(note)
             binding.editTextTitle.setText(note.title)
             binding.editTextContent.setText(note.content)
             binding.textViewDate.text = note.creationDate

@@ -38,6 +38,10 @@ class CreateNoteViewModel @Inject constructor(
     private val _selectedFolder = MutableStateFlow<Folder?>(null)
     val selectedFolder: StateFlow<Folder?> = _selectedFolder
 
+    private val _isNewNote = MutableStateFlow(true)
+    val isNewNote: StateFlow<Boolean> = _isNewNote
+
+
     init {
         viewModelScope.launch {
             val folderList = folderRepository.getAllFolders()
@@ -74,19 +78,23 @@ class CreateNoteViewModel @Inject constructor(
     fun setCurrentNote(note: Note) {
         _currentNote.value = note
         _note.value = note ?: Note(0, 0, "", "", "")
+        _isNewNote.value = false
     }
 
     fun createNewNote() {
         val creationDate = getCreationDate()
         _note.value = Note(0, 0, "", "", creationDate)
+        _isNewNote.value = true
     }
 
     fun onSaveNote() {
         viewModelScope.launch {
             val currentNote = _note.value
+
             val selectedFolder = _selectedFolder.value
             if (selectedFolder != null) {
                 val noteWithFolderId = currentNote.copy(folderId = selectedFolder.id!!)
+
                 val noteWithCreationDate =
                     if (_currentNote.value != null && _isNoteModified.value) {
                         // Если текущая заметка существует и была изменена, обновляем дату создания
@@ -96,18 +104,19 @@ class CreateNoteViewModel @Inject constructor(
                         noteWithFolderId
                     }
 
-                if (_currentNote.value != null) {
-                    // Если текущая заметка существует, обновляем ее
-                    noteRepository.update(noteWithCreationDate)
-                } else {
-                    // Если текущая заметка не существует, создаем новую
+                if (_isNewNote.value) {
+                    // Если создается новая заметка, вставляем ее
                     noteRepository.insert(noteWithCreationDate)
                     // Обновляем счетчик заметок в папке
                     folderRepository.updateNoteCount(noteWithCreationDate.folderId)
+                } else {
+                    // Если редактируется существующая заметка, обновляем ее
+                    noteRepository.update(noteWithCreationDate)
                 }
             }
         }
     }
+
 
     fun onFolderSelected(position: Int) {
         _selectedFolder.value = _allFolders.value[position]
