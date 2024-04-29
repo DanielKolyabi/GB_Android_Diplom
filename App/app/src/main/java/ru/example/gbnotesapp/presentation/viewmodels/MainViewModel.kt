@@ -3,6 +3,7 @@ package ru.example.gbnotesapp.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.example.gbnotesapp.data.db.FolderRepository
 import ru.example.gbnotesapp.data.db.NoteRepository
@@ -21,13 +22,15 @@ class MainViewModel @Inject constructor(
     private val _allFolders = MutableStateFlow<List<Folder>>(listOf())
     val allFolders = _allFolders
 
+    // TODO новый функционал - под вопросом
+    private val _selectedFolder = MutableStateFlow<Folder?>(null)
+    val selectedFolder: StateFlow<Folder?> = _selectedFolder
+
+
     init {
         viewModelScope.launch {
             _allFolders.value = folderRepository.getAllFolders()
             createMainFolder()
-            // TODO - либо удалить, либо оставить 1 из вариантов
-//            _allNotesByFolder.value = noteRepository.getNotesBySelectedFolder(1)
-//            _allNotesByFolder.value = noteRepository.getAllNotes()
         }
     }
 
@@ -45,6 +48,11 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+//    fun setSelectedFolder(folder: Folder) {
+//        _selectedFolder.value = folder
+//    }
+
 
     // Функция для вставки новой заметки
     fun insertNote(note: Note) = viewModelScope.launch {

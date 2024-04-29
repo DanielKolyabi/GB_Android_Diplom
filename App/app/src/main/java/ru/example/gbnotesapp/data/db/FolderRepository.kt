@@ -1,8 +1,5 @@
 package ru.example.gbnotesapp.data.db
 
-import kotlinx.coroutines.flow.count
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import ru.example.gbnotesapp.data.model.Folder
 import javax.inject.Inject
 
@@ -24,9 +21,10 @@ class FolderRepository @Inject constructor(
 
     suspend fun updateNoteCount(folderId: Int) {
         val noteCount = noteDao.getNotesByFolder(folderId).count()
+        val newNoteCount = noteCount+1
         val folder = folderDao.getFolderById(folderId)
         if (folder != null) {
-            val updatedFolder = folder.copy(noteCount = noteCount+1)
+            val updatedFolder = folder.copy(noteCount = newNoteCount)
             folderDao.update(updatedFolder)
         }
     }

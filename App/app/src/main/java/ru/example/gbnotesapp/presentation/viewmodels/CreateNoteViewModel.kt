@@ -112,7 +112,9 @@ class CreateNoteViewModel @Inject constructor(
                     // Если создается новая заметка, вставляем ее
                     noteRepository.insert(noteWithCreationDate)
                     // Обновляем счетчик заметок в папке
+
                     folderRepository.updateNoteCount(noteWithCreationDate.folderId)
+                    folderRepository.update(selectedFolder)
                 } else {
                     // Если редактируется существующая заметка, обновляем ее
                     noteRepository.update(noteWithCreationDate)
@@ -120,7 +122,6 @@ class CreateNoteViewModel @Inject constructor(
             }
         }
     }
-
 
     fun onFolderSelected(position: Int) {
         _selectedFolder.value = _allFolders.value[position]

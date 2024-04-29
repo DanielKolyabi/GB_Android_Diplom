@@ -21,14 +21,12 @@ class ListFoldersViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _allFolders.value = folderRepository.getAllFolders()
-//            createMainFolder()
         }
     }
 
     // Функция для вставки новой папки
     fun insert(folder: Folder) = viewModelScope.launch {
         folderRepository.insert(folder)
-//        allFolders.value = folderRepository.getAllFolders()
         updateFolders()
     }
 
@@ -39,4 +37,10 @@ class ListFoldersViewModel @Inject constructor(
         }
     }
 
+    // TODO возможно можно удалить
+//    fun setSelectedFolder(folder: Folder) {
+//        viewModelScope.launch {
+//            folderRepository.setSelectedFolder(folder)
+//        }
+//    }
 }

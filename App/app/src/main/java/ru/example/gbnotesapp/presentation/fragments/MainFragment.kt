@@ -1,5 +1,6 @@
 package ru.example.gbnotesapp.presentation.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,11 @@ class MainFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         mainViewModel.updateFolders()
 
+        val sharedPreferences = requireActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+        val selectedFolderId = sharedPreferences.getInt("selectedFolderId", 0)
+        mainViewModel.changeListNote(selectedFolderId)
+
+
         noteAdapter = NoteAdapter(
             clickNote = {note ->  onNoteClick(note)}
         )
@@ -81,6 +87,18 @@ class MainFragment : Fragment(){
                 folderAdapter.submitList(folders)
             }
         }
+
+        // TODO новый функционал - тестируется
+        viewLifecycleOwner.lifecycleScope.launch {
+            mainViewModel.selectedFolder.collect { selectedFolder ->
+                // Обновите список заметок для выбранной папки
+                mainViewModel.changeListNote(selectedFolder?.id ?: 0)
+            }
+        }
+
+
+
+
 
         binding.buttonCreateNewNote.setOnClickListener {
             findNavController().navigate(R.id.action_MainFragment_to_CreateNoteFragment)

@@ -1,5 +1,6 @@
 package ru.example.gbnotesapp.presentation.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
@@ -40,7 +41,18 @@ class ListFoldersFragment : Fragment() {
     @Inject
     lateinit var listFoldersViewModelFactory: ViewModelFactory
     private val listFoldersViewModel: ListFoldersViewModel by viewModels { listFoldersViewModelFactory }
-    private val listFolderAdapter: ListFolderAdapter = ListFolderAdapter()
+
+    // TODO попытка 2
+    private val listFolderAdapter: ListFolderAdapter = ListFolderAdapter { folder ->
+        val sharedPreferences = requireActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt("selectedFolderId", folder.id!!)
+        editor.apply()
+
+        findNavController().navigate(R.id.action_ListFoldersFragment_to_MainFragment)
+    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +88,6 @@ class ListFoldersFragment : Fragment() {
             showNewFolderDialog()
         }
     }
-
 
     private fun showNewFolderDialog() {
         val builder = AlertDialog.Builder(requireContext())
@@ -122,26 +133,9 @@ class ListFoldersFragment : Fragment() {
         listFoldersViewModel.insert(newFolder)
     }
 
-    private fun createFolderView(inflater: LayoutInflater, folder: Folder): View {
-        // Создаем новый экземпляр представления папки
-        val folderView =
-            inflater.inflate(R.layout.item_folder_to_list, binding.recyclerViewFolders, false)
-
-        // Заполняем данные папки
-        val folderNameTextView = folderView.findViewById<TextView>(R.id.folderName)
-        folderNameTextView.text = folder.name
-
-        val isFolderSelected = folderView.findViewById<ImageView>(R.id.checkmark)
-        isFolderSelected.isVisible = folder.isSelected
-
-        return folderView
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    companion object {
-    }
 }

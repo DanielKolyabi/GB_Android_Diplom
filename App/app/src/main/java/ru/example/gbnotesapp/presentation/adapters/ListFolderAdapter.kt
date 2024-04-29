@@ -10,6 +10,7 @@ import ru.example.gbnotesapp.data.model.Folder
 import ru.example.gbnotesapp.databinding.ItemFolderToListBinding
 
 class ListFolderAdapter(
+    private val onFolderClick: (Folder) -> Unit
 ) : ListAdapter<Folder, ListFolderViewHolder>(ListFolderDiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListFolderViewHolder {
@@ -24,6 +25,7 @@ class ListFolderAdapter(
     override fun onBindViewHolder(holder: ListFolderViewHolder, position: Int) {
         val currentFolder = getItem(position)
         holder.bind(currentFolder)
+        holder.itemView.setOnClickListener { onFolderClick(currentFolder) }
     }
 
 //    override fun getItemCount(): Int = folders.size

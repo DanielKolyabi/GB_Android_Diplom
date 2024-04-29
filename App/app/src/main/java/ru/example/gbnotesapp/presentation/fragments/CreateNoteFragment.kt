@@ -55,7 +55,6 @@ class CreateNoteFragment : Fragment() {
 
         val note = arguments?.getParcelable<Note>("clickedNote")
 
-        // TODO отображение имени выбранной папки сразу - не работает пока
         lifecycleScope.launch {
             val selectedFolderId = note?.folderId ?: 0
             if (selectedFolderId != 0) {
