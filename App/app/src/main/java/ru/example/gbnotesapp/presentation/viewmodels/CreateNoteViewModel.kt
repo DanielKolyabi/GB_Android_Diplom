@@ -81,6 +81,10 @@ class CreateNoteViewModel @Inject constructor(
         _isNewNote.value = false
     }
 
+    fun setSelectedFolder(folder: Folder) {
+        _selectedFolder.value = folder
+    }
+
     fun createNewNote() {
         val creationDate = getCreationDate()
         _note.value = Note(0, 0, "", "", creationDate)

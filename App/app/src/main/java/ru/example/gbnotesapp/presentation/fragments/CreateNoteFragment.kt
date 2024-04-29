@@ -73,6 +73,10 @@ class CreateNoteFragment : Fragment() {
             binding.editTextTitle.setText(note.title)
             binding.editTextContent.setText(note.content)
             binding.textViewDate.text = note.creationDate
+            lifecycleScope.launch {
+                val currentFolder = folderRepository.getFolderById(note.folderId)
+                currentFolder?.let { viewModel.setSelectedFolder(it) }
+            }
         }
 
         lifecycleScope.launch {
