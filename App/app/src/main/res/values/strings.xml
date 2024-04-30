@@ -15,4 +15,8 @@
     <string name="Folders">Папки</string>
     <string name="button_create_new_note">Кнопка для создания новой заметки</string>
     <string name="go_to_folders_list">Перейти к списку папок</string>
+    <string name="select_Folder">Выберите папку</string>
+    <string name="folder">Папка</string>
+    <string name="button_create_new_folder">Создать новую папку</string>
+    <string name="icon_check">icon_check</string>
 </resources>

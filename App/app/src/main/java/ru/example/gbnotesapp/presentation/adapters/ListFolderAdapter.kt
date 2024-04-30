@@ -32,7 +32,6 @@ class ListFolderAdapter(
             true
         }
     }
-
 }
 
 class ListFolderDiffUtilCallback : DiffUtil.ItemCallback<Folder>() {
@@ -49,7 +48,6 @@ class ListFolderViewHolder(
     fun bind(folder: Folder) {
         binding.apply {
             folderName.text = folder.name
-            noteCount.text = folder.noteCount.toString()
             checkmark.isVisible = folder.isSelected
         }
     }

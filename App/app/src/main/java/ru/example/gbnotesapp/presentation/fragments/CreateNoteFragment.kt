@@ -34,8 +34,6 @@ class CreateNoteFragment : Fragment() {
     lateinit var createNoteViewModelFactory: ViewModelFactory
     private val viewModel: CreateNoteViewModel by viewModels { createNoteViewModelFactory }
 
-    private lateinit var folderAdapter: ArrayAdapter<Folder>
-
     @Inject
     lateinit var folderRepository: FolderRepository
 
@@ -49,20 +47,12 @@ class CreateNoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val note = arguments?.getParcelable<Note>("clickedNote")
+        setSelectedFolder(note)
         setupButtonListeners()
         setEditTextTitleTextChangedListener()
         setEditTextContentTextChangedListener()
-
-        val note = arguments?.getParcelable<Note>("clickedNote")
-
-        lifecycleScope.launch {
-            val selectedFolderId = note?.folderId ?: 0
-            if (selectedFolderId != 0) {
-                val selectedFolder = selectedFolderId.let { folderRepository.getFolderById(it) }
-                binding.selectedFolder.text = selectedFolder?.name
-            } else
-                binding.selectedFolder.text = "нет папки"
-        }
 
         if (note == null) {
             viewModel.createNewNote()
@@ -103,6 +93,17 @@ class CreateNoteFragment : Fragment() {
         }
     }
 
+    private fun setSelectedFolder(note: Note?) {
+        lifecycleScope.launch {
+            val selectedFolderId = note?.folderId ?: 0
+            if (selectedFolderId != 0) {
+                val selectedFolder = selectedFolderId.let { folderRepository.getFolderById(it) }
+                binding.selectedFolder.text = selectedFolder?.name
+            } else
+                binding.selectedFolder.text = "нет папки"
+        }
+    }
+
     private fun setupButtonListeners() {
         binding.buttonBack.setOnClickListener { navigateBack() }
         binding.buttonDone.setOnClickListener { saveNoteAndNavigateBack() }
@@ -121,13 +122,6 @@ class CreateNoteFragment : Fragment() {
             }
         }
         navigateBack()
-    }
-
-    private fun setCurrentCreationDate() {
-        lifecycleScope.launch {
-            val creationDate = viewModel.getCreationDate()
-            binding.textViewDate.text = creationDate
-        }
     }
 
     private fun setEditTextTitleTextChangedListener() {
@@ -172,11 +166,15 @@ class CreateNoteFragment : Fragment() {
         })
     }
 
+    private fun setCurrentCreationDate() {
+        lifecycleScope.launch {
+            val creationDate = viewModel.getCreationDate()
+            binding.textViewDate.text = creationDate
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-    companion object
 }

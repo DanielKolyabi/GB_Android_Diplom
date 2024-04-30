@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 import ru.example.gbnotesapp.data.model.Note
 
 @Dao
@@ -14,8 +13,6 @@ interface NoteDao {
     @Query("SELECT * FROM note ORDER BY creationDate DESC")
     suspend fun getAllNotes(): List<Note>
 
-
-    // TODO добавил ORDER BY creationDate DESC в запрос для сортировки - тестирую
     @Query("SELECT * FROM note WHERE folderId = :folderId ORDER BY creationDate DESC")
     suspend fun getNotesByFolder(folderId: Int): List<Note>
 

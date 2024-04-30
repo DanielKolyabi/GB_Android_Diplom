@@ -19,26 +19,6 @@ class FolderRepository @Inject constructor(
     // Получить папку по id
     suspend fun getFolderById(folderId: Int) = folderDao.getFolderById(folderId)
 
-    suspend fun increaseNoteCount(folderId: Int) {
-        val noteCount = noteDao.getNotesByFolder(folderId).count()
-        val newNoteCount = noteCount + 1
-        val folder = folderDao.getFolderById(folderId)
-        if (folder != null) {
-            val updatedFolder = folder.copy(noteCount = newNoteCount)
-            folderDao.update(updatedFolder)
-        }
-    }
-
-    suspend fun reduceNoteCount(folderId: Int) {
-        val noteCount = noteDao.getNotesByFolder(folderId).count()
-        val newNoteCount = noteCount + 1
-        val folder = folderDao.getFolderById(folderId)
-        if (folder != null) {
-            val updatedFolder = folder.copy(noteCount = newNoteCount)
-            folderDao.update(updatedFolder)
-        }
-    }
-
     // Удалить папку
     suspend fun deleteFolder(folder: Folder) {
         if (folder.name != "Все") {

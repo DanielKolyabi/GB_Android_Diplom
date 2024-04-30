@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Button xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/newFolderButtonOld"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/rounded_search_view"
-    android:drawableTop="@drawable/ic_oval_with_plus"
-    android:text="@string/new_folder_button"/>
-

@@ -5,7 +5,6 @@ import javax.inject.Inject
 
 class NoteRepository @Inject constructor(
     private val noteDao: NoteDao,
-    private val folderRepository: FolderRepository
 ) {
 
     // Получить все заметки
@@ -17,7 +16,6 @@ class NoteRepository @Inject constructor(
     // Вставить новую заметку
     suspend fun insert(note: Note) {
         noteDao.insert(note)
-        folderRepository.increaseNoteCount(note.folderId)
     }
 
     // Обновить существующую заметку
@@ -26,13 +24,10 @@ class NoteRepository @Inject constructor(
     // Удалить заметку
     suspend fun delete(note: Note) {
         noteDao.delete(note)
-        folderRepository.reduceNoteCount(note.folderId)
     }
 
     // Получить заметки из выбранной папки
     suspend fun getNotesBySelectedFolder(folderId: Int): List<Note> {
         return noteDao.getNotesByFolder(folderId)
     }
-
-
 }

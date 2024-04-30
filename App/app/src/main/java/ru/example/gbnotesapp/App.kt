@@ -6,7 +6,6 @@ import dagger.hilt.android.HiltAndroidApp
 import ru.example.gbnotesapp.data.db.AppDatabase
 import ru.example.gbnotesapp.data.db.MIGRATION_1_2
 
-
 @HiltAndroidApp
 class App : Application() {
     lateinit var db: AppDatabase

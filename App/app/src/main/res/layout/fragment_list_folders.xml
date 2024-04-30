@@ -14,7 +14,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:background="@drawable/backgroung_item_note_to_main_fragment"
+            android:background="@drawable/background_item_note_to_main_fragment"
             android:layout_height="?attr/actionBarSize"
             android:orientation="horizontal">
 
@@ -27,7 +27,8 @@
                 android:src="@drawable/rounded_keyboard_backspace_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/button_back" />
 
             <TextView
                 android:id="@+id/title"
@@ -64,6 +65,7 @@
         app:fabSize="normal"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:contentDescription="TODO" />
+        android:contentDescription="@string/button_create_new_folder"
+        tools:ignore="RelativeOverlap" />
 
 </RelativeLayout>

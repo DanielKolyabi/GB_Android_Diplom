@@ -15,14 +15,12 @@ class MainViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
     private val folderRepository: FolderRepository
 ) : ViewModel() {
-
     private val _allNotesByFolder = MutableStateFlow<List<Note>>(listOf())
     val allNotesByFolder = _allNotesByFolder
 
     private val _allFolders = MutableStateFlow<List<Folder>>(listOf())
     val allFolders = _allFolders
 
-    // TODO новый функционал - под вопросом
     private val _selectedFolder = MutableStateFlow<Folder?>(null)
     val selectedFolder: StateFlow<Folder?> = _selectedFolder
 
@@ -48,7 +46,6 @@ class MainViewModel @Inject constructor(
                     noteRepository.getAllNotes()
                 else
                     noteRepository.getNotesBySelectedFolder(folderId)
-
                 _allNotesByFolder.value = notesInFolder
             }
         }

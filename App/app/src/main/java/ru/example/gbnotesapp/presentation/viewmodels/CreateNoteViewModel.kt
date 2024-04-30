@@ -115,8 +115,6 @@ class CreateNoteViewModel @Inject constructor(
             if (_isNewNote.value) {
                 // Если создается новая заметка, вставляем ее
                 noteRepository.insert(noteWithCreationDate)
-                // Обновляем счетчик заметок в папке
-                folderRepository.increaseNoteCount(noteWithCreationDate.folderId)
                 folderRepository.update(selectedFolder)
             } else {
                 // Если редактируется существующая заметка, обновляем ее

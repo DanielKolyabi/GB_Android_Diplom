@@ -125,7 +125,7 @@ class ListFoldersFragment : Fragment() {
                 .show()
             return
         }
-        val newFolder = Folder(null, folderName, 0, false)
+        val newFolder = Folder(null, folderName, false)
         listFoldersViewModel.insert(newFolder)
     }
 

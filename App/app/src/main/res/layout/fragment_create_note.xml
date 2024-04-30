@@ -51,16 +51,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="Выберите папку"
+        android:hint="@string/select_Folder"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:startIconDrawable="@drawable/outline_folders_24"
-        >
+        app:startIconDrawable="@drawable/outline_folders_24">
+
         <AutoCompleteTextView
             android:id="@+id/listFolders_autoCompleteTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
-            android:text="Папка"
+            android:text="@string/folder"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             tools:ignore="LabelFor,MissingConstraints" />
 

@@ -2,12 +2,9 @@ package ru.example.gbnotesapp.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.PrimaryKey
-import ru.example.gbnotesapp.R
 import ru.example.gbnotesapp.data.model.Note
 import ru.example.gbnotesapp.databinding.ItemNoteToMainFragmentBinding
 
@@ -51,7 +48,6 @@ class NoteAdapter(
             }
         }
     }
-
 }
 
 class DiffUtilCallback : DiffUtil.ItemCallback<Note>() {

@@ -30,8 +30,7 @@
         android:src="@drawable/twotone_folder_copy_24"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerViewFolders"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recyclerViewFolders"
-        app:layout_constraintVertical_bias="0.503" />
+        app:layout_constraintTop_toTopOf="@+id/recyclerViewFolders" />
 
     <TextView
         android:id="@+id/current_folder_name"
