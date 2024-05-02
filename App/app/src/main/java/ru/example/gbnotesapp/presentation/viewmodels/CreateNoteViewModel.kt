@@ -65,19 +65,9 @@ class CreateNoteViewModel @Inject constructor(
         return currentTime + currentDate
     }
 
-
-    //TODO Удалить
-    fun getNoteById(noteId: Int) {
-        viewModelScope.launch {
-            val note = noteRepository.getNoteById(noteId)
-            _currentNote.value = note
-            _note.value = note ?: Note(0, 0, "", "", "")
-        }
-    }
-
     fun setCurrentNote(note: Note) {
         _currentNote.value = note
-        _note.value = note ?: Note(0, 0, "", "", "")
+        _note.value = note
         _isNewNote.value = false
     }
 

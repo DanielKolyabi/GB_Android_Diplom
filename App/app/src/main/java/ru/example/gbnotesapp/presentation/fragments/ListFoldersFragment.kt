@@ -35,7 +35,6 @@ class ListFoldersFragment : Fragment() {
     lateinit var listFoldersViewModelFactory: ViewModelFactory
     private val listFoldersViewModel: ListFoldersViewModel by viewModels { listFoldersViewModelFactory }
 
-    // TODO попытка 2
     private val listFolderAdapter: ListFolderAdapter = ListFolderAdapter(
         onFolderClick = { folder ->
             val sharedPreferences =

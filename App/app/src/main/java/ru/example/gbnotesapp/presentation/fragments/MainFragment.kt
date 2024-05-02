@@ -62,7 +62,6 @@ class MainFragment : Fragment() {
 
         noteAdapter = NoteAdapter(
             clickNote = { note -> onNoteClick(note) },
-            // TODO Новый тестовый функционал удаления заметки по долгому нажатию
             longClickNote = { note -> onNoteLongClick(note) }
         )
         binding.recyclerViewNotes.adapter = noteAdapter
@@ -97,10 +96,9 @@ class MainFragment : Fragment() {
             }
         }
 
-        // TODO новый функционал - тестируется
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.selectedFolder.collect { selectedFolder ->
-                // Обновите список заметок для выбранной папки
+                // Обновление списка заметок для выбранной папки
                 mainViewModel.changeListNote(selectedFolder?.id ?: 0)
             }
         }
